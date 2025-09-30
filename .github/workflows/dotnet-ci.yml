@@ -43,7 +43,7 @@ jobs:
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.project-path }}-build
+        name: ${{ matrix.project-path == '02Lab/02LabA/TaskA/EmployeePensionApp' && 'TaskA-EmployeePensionApp-build' || 'TaskB-EmployeePensionApp-build' }}
         path: ./publish/${{ matrix.project-path }}
         
   security-scan:

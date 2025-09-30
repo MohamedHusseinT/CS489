@@ -10,7 +10,7 @@ namespace EmployeePensionApp.Model
         private string _lastName;
         private DateTime _employmentDate;
         private decimal _yearlySalary;
-        private PensionPlan _pensionPlan;
+        private PensionPlan? _pensionPlan;
 
         // Default constructor
         public Employee()
@@ -35,7 +35,7 @@ namespace EmployeePensionApp.Model
         }
 
         // Copy constructor
-        public Employee(Employee other)
+        public Employee(Employee? other)
         {
             if (other != null)
             {
@@ -84,7 +84,7 @@ namespace EmployeePensionApp.Model
         }
 
         // Getter and Setter for PensionPlan
-        public PensionPlan PensionPlan
+        public PensionPlan? PensionPlan
         {
             get { return _pensionPlan; }
             set { _pensionPlan = value; }

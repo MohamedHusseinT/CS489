@@ -26,7 +26,7 @@ namespace EmployeePensionApp.Model
         }
 
         // Copy constructor
-        public PensionPlan(PensionPlan other)
+        public PensionPlan(PensionPlan? other)
         {
             if (other != null)
             {
