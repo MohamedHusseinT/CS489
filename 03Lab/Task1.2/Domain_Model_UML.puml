@@ -1,0 +1,135 @@
+@startuml Advantis Dental Surgeries Domain Model
+
+!define ENTITY class
+!define PK <<PK>>
+!define FK <<FK>>
+
+title Advantis Dental Surgeries (ADS) - Domain Model Class Diagram
+
+ENTITY OfficeManager {
+    PK managerId : String
+    firstName : String
+    lastName : String
+    email : String
+    phoneNumber : String
+    --
+    + registerDentist()
+    + enrollPatient()
+    + bookAppointment()
+    + sendConfirmationEmail()
+}
+
+ENTITY Dentist {
+    PK dentistId : String
+    firstName : String
+    lastName : String
+    email : String
+    phoneNumber : String
+    specialization : String
+    --
+    + signIn()
+    + viewAppointments()
+    + getWeeklyAppointmentCount()
+}
+
+ENTITY Patient {
+    PK patientId : String
+    firstName : String
+    lastName : String
+    email : String
+    phoneNumber : String
+    mailingAddress : String
+    dateOfBirth : Date
+    --
+    + signIn()
+    + requestAppointment()
+    + viewAppointments()
+    + cancelAppointment()
+    + changeAppointment()
+    + hasOutstandingBills() : Boolean
+}
+
+ENTITY Appointment {
+    PK appointmentId : String
+    appointmentDate : Date
+    appointmentTime : Time
+    status : String
+    notes : String
+    confirmationSent : Boolean
+    FK dentistId : String
+    FK patientId : String
+    FK surgeryId : String
+    FK managerId : String
+    --
+    + schedule()
+    + confirm()
+    + cancel()
+    + reschedule()
+}
+
+ENTITY Surgery {
+    PK surgeryId : String
+    surgeryName : String
+    address : String
+    phoneNumber : String
+    city : String
+    --
+    + getLocationInfo()
+    + getContactInfo()
+}
+
+ENTITY Bill {
+    PK billId : String
+    amount : Decimal
+    dueDate : Date
+    status : String
+    serviceDescription : String
+    billDate : Date
+    FK patientId : String
+    FK dentistId : String
+    --
+    + calculateAmount()
+    + markAsPaid()
+    + checkOutstandingStatus() : Boolean
+}
+
+' Relationships
+OfficeManager ||--o{ Dentist : "manages\n(1..* to 1)"
+OfficeManager ||--o{ Patient : "enrolls\n(1..* to 1)"
+OfficeManager ||--o{ Appointment : "books\n(1..* to 1)"
+
+Dentist ||--o{ Appointment : "has\n(1 to 1..*)"
+Patient ||--o{ Appointment : "schedules\n(1 to 1..*)"
+
+Appointment }o--|| Surgery : "scheduled at\n(* to 1)"
+
+Patient ||--o{ Bill : "has\n(1 to 1..*)"
+Dentist ||--o{ Bill : "provides services for\n(1 to 1..*)"
+
+note top of OfficeManager
+  Manages dentist registrations,
+  patient enrollments, and
+  appointment bookings
+end note
+
+note top of Dentist
+  Cannot have more than
+  5 appointments per week
+end note
+
+note top of Patient
+  Cannot request new appointments
+  if they have outstanding bills
+end note
+
+note top of Appointment
+  Each appointment is associated
+  with one surgery location
+end note
+
+note top of Bill
+  Tracks outstanding payments
+  to prevent new appointments
+end note
+
+@enduml

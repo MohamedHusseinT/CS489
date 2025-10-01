@@ -1,0 +1,219 @@
+================================================================================
+                    ADVANTIS DENTAL SURGERIES (ADS) - DOMAIN MODEL
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              OfficeManager                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ + managerId: String (PK)                                                   │
+│ + firstName: String                                                        │
+│ + lastName: String                                                         │
+│ + email: String                                                            │
+│ + phoneNumber: String                                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ + registerDentist()                                                        │
+│ + enrollPatient()                                                          │
+│ + bookAppointment()                                                        │
+│ + sendConfirmationEmail()                                                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    │ 1..*
+                                    │ manages
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                Dentist                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ + dentistId: String (PK)                                                   │
+│ + firstName: String                                                        │
+│ + lastName: String                                                         │
+│ + email: String                                                            │
+│ + phoneNumber: String                                                      │
+│ + specialization: String                                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ + signIn()                                                                 │
+│ + viewAppointments()                                                       │
+│ + getWeeklyAppointmentCount()                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    │ 1..1
+                                    │ has
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              Appointment                                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ + appointmentId: String (PK)                                               │
+│ + appointmentDate: Date                                                    │
+│ + appointmentTime: Time                                                    │
+│ + status: String                                                           │
+│ + notes: String                                                            │
+│ + confirmationSent: Boolean                                                │
+│ + dentistId: String (FK)                                                   │
+│ + patientId: String (FK)                                                   │
+│ + surgeryId: String (FK)                                                   │
+│ + managerId: String (FK)                                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ + schedule()                                                               │
+│ + confirm()                                                                │
+│ + cancel()                                                                 │
+│ + reschedule()                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    │ *..1
+                                    │ scheduled at
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                Surgery                                       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ + surgeryId: String (PK)                                                   │
+│ + surgeryName: String                                                      │
+│ + address: String                                                          │
+│ + phoneNumber: String                                                      │
+│ + city: String                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ + getLocationInfo()                                                        │
+│ + getContactInfo()                                                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              OfficeManager                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ + managerId: String (PK)                                                   │
+│ + firstName: String                                                        │
+│ + lastName: String                                                         │
+│ + email: String                                                            │
+│ + phoneNumber: String                                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ + registerDentist()                                                        │
+│ + enrollPatient()                                                          │
+│ + bookAppointment()                                                        │
+│ + sendConfirmationEmail()                                                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    │ 1..*
+                                    │ enrolls
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                Patient                                       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ + patientId: String (PK)                                                   │
+│ + firstName: String                                                        │
+│ + lastName: String                                                         │
+│ + email: String                                                            │
+│ + phoneNumber: String                                                      │
+│ + mailingAddress: String                                                   │
+│ + dateOfBirth: Date                                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ + signIn()                                                                 │
+│ + requestAppointment()                                                     │
+│ + viewAppointments()                                                       │
+│ + cancelAppointment()                                                      │
+│ + changeAppointment()                                                      │
+│ + hasOutstandingBills(): Boolean                                           │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    │ 1..1
+                                    │ schedules
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              Appointment                                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ + appointmentId: String (PK)                                               │
+│ + appointmentDate: Date                                                    │
+│ + appointmentTime: Time                                                    │
+│ + status: String                                                           │
+│ + notes: String                                                            │
+│ + confirmationSent: Boolean                                                │
+│ + dentistId: String (FK)                                                   │
+│ + patientId: String (FK)                                                   │
+│ + surgeryId: String (FK)                                                   │
+│ + managerId: String (FK)                                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ + schedule()                                                               │
+│ + confirm()                                                                │
+│ + cancel()                                                                 │
+│ + reschedule()                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                Patient                                       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ + patientId: String (PK)                                                   │
+│ + firstName: String                                                        │
+│ + lastName: String                                                         │
+│ + email: String                                                            │
+│ + phoneNumber: String                                                      │
+│ + mailingAddress: String                                                   │
+│ + dateOfBirth: Date                                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ + signIn()                                                                 │
+│ + requestAppointment()                                                     │
+│ + viewAppointments()                                                       │
+│ + cancelAppointment()                                                      │
+│ + changeAppointment()                                                      │
+│ + hasOutstandingBills(): Boolean                                           │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    │ 1..1
+                                    │ has
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                 Bill                                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ + billId: String (PK)                                                      │
+│ + amount: Decimal                                                          │
+│ + dueDate: Date                                                            │
+│ + status: String                                                           │
+│ + serviceDescription: String                                               │
+│ + billDate: Date                                                           │
+│ + patientId: String (FK)                                                   │
+│ + dentistId: String (FK)                                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ + calculateAmount()                                                        │
+│ + markAsPaid()                                                             │
+│ + checkOutstandingStatus(): Boolean                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    ▲
+                                    │ 1..1
+                                    │ provides services for
+                                    │
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                Dentist                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ + dentistId: String (PK)                                                   │
+│ + firstName: String                                                        │
+│ + lastName: String                                                         │
+│ + email: String                                                            │
+│ + phoneNumber: String                                                      │
+│ + specialization: String                                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ + signIn()                                                                 │
+│ + viewAppointments()                                                       │
+│ + getWeeklyAppointmentCount()                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+                                BUSINESS RULES
+================================================================================
+
+1. Each Dentist has a unique ID number
+2. A Dentist cannot have more than 5 appointments in any given week
+3. Patients with outstanding, unpaid bills cannot request new appointments
+4. All appointments must be associated with a specific Surgery location
+5. Appointment confirmations must be sent via email to Patients
+6. Only Office Managers can book appointments
+7. Patients can only view and modify their own appointments
+8. Dentists can only view their own appointments
+
+================================================================================
+                              RELATIONSHIPS SUMMARY
+================================================================================
+
+OfficeManager 1..* manages Dentist 1..1
+OfficeManager 1..* enrolls Patient 1..1
+OfficeManager 1..* books Appointment 1..1
+Dentist 1..1 has Appointment 1..* with Patient 1..*
+Appointment *..1 is scheduled at Surgery 1..1
+Patient 1..1 has Bill 1..*
+Dentist 1..1 provides services for Bill 1..*
+
+================================================================================
