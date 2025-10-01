@@ -1,0 +1,110 @@
+@page "/"
+@using CAMS.Shared.DTOs
+@using CAMS.Blazor.Services
+@inject ICustomerAccountService CustomerAccountService
+@inject NavigationManager Navigation
+
+<PageTitle>The Special Bank of Burlington</PageTitle>
+
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="row bg-primary text-white py-3 mb-4">
+        <div class="col">
+            <h1 class="display-4 text-center">The Special Bank of Burlington</h1>
+            <p class="lead text-center">Customer-Accounts Management System (CAMS)</p>
+        </div>
+    </div>
+
+    <!-- Welcome Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="jumbotron bg-light p-5 rounded">
+                <h2 class="display-5 text-center mb-4">Welcome to the Customer-Accounts Management System</h2>
+                <p class="lead text-center">Manage your bank's customer accounts and monitor liquidity position with ease.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Options -->
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow">
+                <div class="card-body text-center">
+                    <i class="fas fa-list-alt fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">View All Accounts</h5>
+                    <p class="card-text">View all customer accounts sorted by balance with liquidity position.</p>
+                    <button class="btn btn-primary" @onclick="() => Navigation.NavigateTo("/accounts")">
+                        View Accounts
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow">
+                <div class="card-body text-center">
+                    <i class="fas fa-plus-circle fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Create New Account</h5>
+                    <p class="card-text">Add a new customer and their account to the system.</p>
+                    <button class="btn btn-success" @onclick="() => Navigation.NavigateTo("/create-account")">
+                        Create Account
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow">
+                <div class="card-body text-center">
+                    <i class="fas fa-star fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">Prime Accounts</h5>
+                    <p class="card-text">View accounts with balance greater than $10,000.</p>
+                    <button class="btn btn-warning" @onclick="() => Navigation.NavigateTo("/prime-accounts")">
+                        View Prime Accounts
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Endpoints Info -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">API Endpoints</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>All Accounts (JSON)</h6>
+                            <code>/api/account/list</code>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Prime Accounts (JSON)</h6>
+                            <code>/api/account/prime/list</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .jumbotron {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+    
+    .card {
+        transition: transform 0.2s;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .fa-3x {
+        font-size: 3em;
+    }
+</style>

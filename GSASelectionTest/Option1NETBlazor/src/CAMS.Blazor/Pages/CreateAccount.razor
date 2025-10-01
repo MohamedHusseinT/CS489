@@ -1,0 +1,167 @@
+@page "/create-account"
+@using CAMS.Shared.DTOs
+@using CAMS.Blazor.Services
+@inject ICustomerAccountService CustomerAccountService
+@inject NavigationManager Navigation
+
+<PageTitle>Create New Account - The Special Bank of Burlington</PageTitle>
+
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="row bg-primary text-white py-3 mb-4">
+        <div class="col">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="display-5 mb-0">Create New Customer-Account</h1>
+                <button class="btn btn-light" @onclick="() => Navigation.NavigateTo("/")">
+                    <i class="fas fa-home"></i> Home
+                </button>
+            </div>
+        </div>
+    </div>
+
+    @if (showSuccessMessage)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <h4 class="alert-heading">Success!</h4>
+            <p>Customer account has been created successfully.</p>
+            <hr>
+            <p class="mb-0">
+                <strong>Account Number:</strong> @newAccount?.AccountNumber<br>
+                <strong>Customer:</strong> @newAccount?.CustomerName<br>
+                <strong>Balance:</strong> @newAccount?.Balance.ToString("C")
+            </p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (errorMessage != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Error!</h4>
+            <p>@errorMessage</p>
+        </div>
+    }
+
+    <!-- Create Account Form -->
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5 class="mb-0">Customer-Account Information</h5>
+                </div>
+                <div class="card-body">
+                    <EditForm Model="newAccountDto" OnValidSubmit="HandleValidSubmit">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        
+                        <div class="row">
+                            <!-- Customer Information -->
+                            <div class="col-md-6">
+                                <h6 class="text-primary mb-3">Customer Information</h6>
+                                
+                                <div class="mb-3">
+                                    <label for="firstName" class="form-label">First Name *</label>
+                                    <InputText id="firstName" class="form-control" @bind="newAccountDto.FirstName" />
+                                    <ValidationMessage For="@(() => newAccountDto.FirstName)" class="text-danger" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="lastName" class="form-label">Last Name *</label>
+                                    <InputText id="lastName" class="form-control" @bind="newAccountDto.LastName" />
+                                    <ValidationMessage For="@(() => newAccountDto.LastName)" class="text-danger" />
+                                </div>
+                            </div>
+
+                            <!-- Account Information -->
+                            <div class="col-md-6">
+                                <h6 class="text-primary mb-3">Account Information</h6>
+                                
+                                <div class="mb-3">
+                                    <label for="accountNumber" class="form-label">Account Number *</label>
+                                    <InputText id="accountNumber" class="form-control" @bind="newAccountDto.AccountNumber" />
+                                    <ValidationMessage For="@(() => newAccountDto.AccountNumber)" class="text-danger" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="accountType" class="form-label">Account Type *</label>
+                                    <InputSelect id="accountType" class="form-select" @bind="newAccountDto.AccountType">
+                                        <option value="">Select Account Type</option>
+                                        <option value="Checking">Checking</option>
+                                        <option value="Savings">Savings</option>
+                                    </InputSelect>
+                                    <ValidationMessage For="@(() => newAccountDto.AccountType)" class="text-danger" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="balance" class="form-label">Initial Balance *</label>
+                                    <InputNumber id="balance" class="form-control" @bind="newAccountDto.Balance" />
+                                    <ValidationMessage For="@(() => newAccountDto.Balance)" class="text-danger" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="dateOpened" class="form-label">Date Opened</label>
+                                    <InputDate id="dateOpened" class="form-control" @bind="newAccountDto.DateOpened" />
+                                    <ValidationMessage For="@(() => newAccountDto.DateOpened)" class="text-danger" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="button" class="btn btn-secondary me-md-2" @onclick="() => Navigation.NavigateTo("/")">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" class="btn btn-primary" disabled="@isSubmitting">
+                                        @if (isSubmitting)
+                                        {
+                                            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                            <span>Creating...</span>
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-plus-circle me-2"></i>
+                                            <span>Create Account</span>
+                                        }
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private CreateCustomerAccountDto newAccountDto = new();
+    private CustomerAccountDto? newAccount;
+    private bool isSubmitting = false;
+    private bool showSuccessMessage = false;
+    private string? errorMessage;
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            isSubmitting = true;
+            errorMessage = null;
+            showSuccessMessage = false;
+
+            newAccount = await CustomerAccountService.CreateCustomerAccountAsync(newAccountDto);
+            showSuccessMessage = true;
+
+            // Reset form
+            newAccountDto = new CreateCustomerAccountDto();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Failed to create customer account: {ex.Message}";
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+}

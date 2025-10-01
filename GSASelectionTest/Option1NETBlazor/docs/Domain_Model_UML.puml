@@ -1,0 +1,43 @@
+@startuml CAMS Domain Model
+
+!define ENTITY class
+!define PK <<PK>>
+!define FK <<FK>>
+
+title Customer-Accounts Management System (CAMS) - Domain Model
+
+ENTITY Customer {
+    PK customerId : long
+    firstName : string
+    lastName : string
+    --
+    + getFullName() : string
+}
+
+ENTITY Account {
+    PK accountId : long
+    accountNumber : string
+    accountType : string
+    dateOpened : DateTime
+    balance : decimal
+    FK customerId : long
+    --
+    + isPrimeAccount() : boolean
+    + getFormattedBalance() : string
+}
+
+' Relationship
+Customer ||--|| Account : "owns\n(1 to 1)"
+
+note top of Customer
+  A Customer can own
+  one and only one Account
+end note
+
+note top of Account
+  Prime Account: balance > $10,000
+  Each Account is owned by
+  only one Customer
+end note
+
+@enduml
