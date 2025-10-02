@@ -1,0 +1,289 @@
+@page "/create-account-js"
+
+<PageTitle>Create New Account (JavaScript) - The Special Bank of Burlington</PageTitle>
+
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="row bg-primary text-white py-3 mb-4">
+        <div class="col">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="display-5 mb-0">Create New Customer-Account (JavaScript Version)</h1>
+                <button class="btn btn-light" onclick="window.location.href='/'">
+                    <i class="fas fa-home"></i> Home
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="alertContainer" class="row" style="display: none;">
+        <div class="col-12">
+            <div id="alertMessage" role="alert"></div>
+        </div>
+    </div>
+
+    <!-- Create Account Form -->
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5 class="mb-0">Customer-Account Information</h5>
+                </div>
+                <div class="card-body">
+                    <form id="customerAccountForm">
+                        <div class="row">
+                            <!-- Customer Information -->
+                            <div class="col-md-6">
+                                <h6 class="text-primary mb-3">Customer Information</h6>
+                                
+                                <div class="mb-3">
+                                    <label for="firstName" class="form-label">First Name *</label>
+                                    <input type="text" id="firstName" class="form-control" required maxlength="100" />
+                                    <div class="invalid-feedback" id="firstNameError"></div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="lastName" class="form-label">Last Name *</label>
+                                    <input type="text" id="lastName" class="form-control" required maxlength="100" />
+                                    <div class="invalid-feedback" id="lastNameError"></div>
+                                </div>
+                            </div>
+
+                            <!-- Account Information -->
+                            <div class="col-md-6">
+                                <h6 class="text-primary mb-3">Account Information</h6>
+                                
+                                <div class="mb-3">
+                                    <label for="accountNumber" class="form-label">Account Number *</label>
+                                    <input type="text" id="accountNumber" class="form-control" required maxlength="50" />
+                                    <div class="invalid-feedback" id="accountNumberError"></div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="accountType" class="form-label">Account Type *</label>
+                                    <select id="accountType" class="form-select" required>
+                                        <option value="">Select Account Type</option>
+                                        <option value="Checking">Checking</option>
+                                        <option value="Savings">Savings</option>
+                                    </select>
+                                    <div class="invalid-feedback" id="accountTypeError"></div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="balance" class="form-label">Initial Balance *</label>
+                                    <input type="number" id="balance" class="form-control" required min="0.01" step="0.01" />
+                                    <div class="invalid-feedback" id="balanceError"></div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="dateOpened" class="form-label">Date Opened</label>
+                                    <input type="date" id="dateOpened" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="button" class="btn btn-secondary me-md-2" onclick="window.location.href='/'">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" id="submitBtn" class="btn btn-primary">
+                                        <i class="fas fa-plus-circle me-2"></i>
+                                        <span>Create Account</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('customerAccountForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const alertContainer = document.getElementById('alertContainer');
+    const alertMessage = document.getElementById('alertMessage');
+
+    // Show alert function
+    function showAlert(message, type) {
+        alertMessage.className = `alert alert-${type} alert-dismissible fade show`;
+        alertMessage.innerHTML = `
+            <h4 class="alert-heading">${type === 'success' ? 'Success!' : 'Error!'}</h4>
+            <p>${message}</p>
+            ${type === 'success' ? 
+                '<hr><p class="mb-0"><strong>New Account:</strong> ' + message.match(/Account Number: ([^)]+)/)[1] + '</p>' : 
+                ''
+            }
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        alertContainer.style.display = 'block';
+    }
+
+    // Hide alert function
+    function hideAlert() {
+        alertContainer.style.display = 'none';
+    }
+
+    // Clear validation errors
+    function clearValidationErrors() {
+        const inputs = form.querySelectorAll('.form-control, .form-select');
+        inputs.forEach(input => {
+            input.classList.remove('is-invalid');
+            const errorDiv = document.getElementById(input.id + 'Error');
+            if (errorDiv) errorDiv.textContent = '';
+        });
+    }
+
+    // Validate form
+    function validateForm() {
+        clearValidationErrors();
+        let isValid = true;
+
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const accountNumber = document.getElementById('accountNumber').value.trim();
+        const accountType = document.getElementById('accountType').value;
+        const balance = parseFloat(document.getElementById('balance').value);
+
+        if (!firstName) {
+            showFieldError('firstName', 'First Name is required.');
+            isValid = false;
+        }
+
+        if (!lastName) {
+            showFieldError('lastName', 'Last Name is required.');
+            isValid = false;
+        }
+
+        if (!accountNumber) {
+            showFieldError('accountNumber', 'Account Number is required.');
+            isValid = false;
+        }
+
+        if (!accountType) {
+            showFieldError('accountType', 'Account Type is required.');
+            isValid = false;
+        }
+
+        if (!balance || balance <= 0) {
+            showFieldError('balance', 'Balance must be a positive value.');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    // Show field error
+    function showFieldError(fieldId, message) {
+        const field = document.getElementById(fieldId);
+        const errorDiv = document.getElementById(fieldId + 'Error');
+        field.classList.add('is-invalid');
+        if (errorDiv) errorDiv.textContent = message;
+    }
+
+    // Form submit handler
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        if (!validateForm()) {
+            return;
+        }
+
+        const submitBtn = document.getElementById('submitBtn');
+        const originalText = submitBtn.innerHTML;
+        
+        try {
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span name="spinner-border spinner-border-sm me-2" role="status"></span>Creating...';
+            
+            hideAlert();
+
+            // Get form data
+            const formData = {
+                firstName: document.getElementById('firstName').value.trim(),
+                lastName: document.getElementById('lastName').value.trim(),
+                accountNumber: document.getElementById('accountNumber').value.trim(),
+                accountType: document.getElementById('accountType').value,
+                balance: parseFloat(document.getElementById('balance').value),
+                dateOpened: document.getElementById('dateOpened').value ? new Date(document.getElementById('dateOpened').value).toISOString() : null
+            };
+
+            // Call API
+            const response = await fetch('/api/account', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                showAlert(`Customer account has been created successfully! Account Number: ${result.accountNumber}, Customer: ${result.customerName}, Balance: $${result.balance.toFixed(2)}`, 'success');
+                
+                // Reset form
+                form.reset();
+                clearValidationErrors();
+            } else {
+                let errorMessage = 'Failed to create customer account.';
+                if (result.errors) {
+                    errorMessage = Object.values(result.errors).flat().join('; ');
+                } else if (result.message) {
+                    errorMessage = result.message;
+                }
+                showAlert(errorMessage, 'danger');
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+            showAlert(`Failed to create customer account: ${error.message}`, 'danger');
+        } finally {
+            // Restore button state
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+        }
+    });
+
+    // Real-time validation
+    const inputs = form.querySelectorAll('.form-control, .form-select');
+    inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            const value = this.value.trim();
+            if (this.hasAttribute('required') && !value) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid', 'is-valid');
+                if (value) this.classList.add('is-valid');
+            }
+        });
+    });
+});
+
+// Back navigation
+function goHome() {
+    window.location.href = '/';
+}
+</script>
+
+<style>
+.form-control.is-valid, .form-select.is-valid {
+    border-color: #28a745;
+}
+
+.form-control.is-invalid, .form-select.is-invalid {
+    border-color: #dc3545;
+}
+
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+}
+</style>

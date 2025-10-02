@@ -40,18 +40,23 @@
             </div>
         </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow">
-                <div class="card-body text-center">
-                    <i class="fas fa-plus-circle fa-3x text-success mb-3"></i>
-                    <h5 class="card-title">Create New Account</h5>
-                    <p class="card-text">Add a new customer and their account to the system.</p>
-                    <button class="btn btn-success" @onclick="() => Navigation.NavigateTo("/create-account")">
-                        Create Account
-                    </button>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow">
+                    <div class="card-body text-center">
+                        <i class="fas fa-plus-circle fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">Create New Account</h5>
+                        <p class="card-text">Add a new customer and their account to the system.</p>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-success" onclick="window.location.href='/create-account'">
+                                Create Account (JavaScript)
+                            </button>
+                            <button class="btn btn-outline-success" onclick="window.location.href='/create-account-js'">
+                                Enhanced Form
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
         <div class="col-md-4 mb-4">
             <div class="card h-100 shadow">

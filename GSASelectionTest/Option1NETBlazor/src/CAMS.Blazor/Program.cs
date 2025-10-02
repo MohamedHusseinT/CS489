@@ -9,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+// SignalR is automatically configured by AddInteractiveServerComponents()
+
     // Add Entity Framework
     builder.Services.AddDbContext<CamsDbContext>(options =>
         options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")
@@ -41,7 +43,13 @@ app.UseRouting();
 // Map API controllers
 app.MapControllers();
 
+// Serve additional static files for Blazor
+app.UseDefaultFiles();
+
 app.UseAntiforgery();
+
+// Map Blazor Hub for SignalR BEFORE mapping components
+app.MapBlazorHub();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();

@@ -19,28 +19,7 @@
         </div>
     </div>
 
-    @if (showSuccessMessage)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <h4 class="alert-heading">Success!</h4>
-            <p>Customer account has been created successfully.</p>
-            <hr>
-            <p class="mb-0">
-                <strong>Account Number:</strong> @newAccount?.AccountNumber<br>
-                <strong>Customer:</strong> @newAccount?.CustomerName<br>
-                <strong>Balance:</strong> @newAccount?.Balance.ToString("C")
-            </p>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-
-    @if (errorMessage != null)
-    {
-        <div class="alert alert-danger" role="alert">
-            <h4 class="alert-heading">Error!</h4>
-            <p>@errorMessage</p>
-        </div>
-    }
+<!-- Success/Error messages will be handled by JavaScript alerts -->
 
     <!-- Create Account Form -->
     <div class="row justify-content-center">
@@ -50,10 +29,14 @@
                     <h5 class="mb-0">Customer-Account Information</h5>
                 </div>
                 <div class="card-body">
-                    <EditForm Model="newAccountDto" OnValidSubmit="HandleValidSubmit">
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
-                        
+                    <!-- JavaScript Form Notice -->
+                    <div class="alert alert-info mb-3">
+                        <h6>Pure JavaScript Form:</h6>
+                        <p>✅ This form uses native JavaScript - no SignalR required</p>
+                        <p><small>Form submission handled by client-side JavaScript</small></p>
+                    </div>
+
+                    <form @onsubmit="HandleFormSubmit">
                         <div class="row">
                             <!-- Customer Information -->
                             <div class="col-md-6">
@@ -61,14 +44,12 @@
                                 
                                 <div class="mb-3">
                                     <label for="firstName" class="form-label">First Name *</label>
-                                    <InputText id="firstName" class="form-control" @bind="newAccountDto.FirstName" />
-                                    <ValidationMessage For="@(() => newAccountDto.FirstName)" class="text-danger" />
+                                    <input type="text" id="firstName" class="form-control" @bind="firstName" required />
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="lastName" class="form-label">Last Name *</label>
-                                    <InputText id="lastName" class="form-control" @bind="newAccountDto.LastName" />
-                                    <ValidationMessage For="@(() => newAccountDto.LastName)" class="text-danger" />
+                                    <input type="text" id="lastName" class="form-control" @bind="lastName" required />
                                 </div>
                             </div>
 
@@ -78,30 +59,26 @@
                                 
                                 <div class="mb-3">
                                     <label for="accountNumber" class="form-label">Account Number *</label>
-                                    <InputText id="accountNumber" class="form-control" @bind="newAccountDto.AccountNumber" />
-                                    <ValidationMessage For="@(() => newAccountDto.AccountNumber)" class="text-danger" />
+                                    <input type="text" id="accountNumber" class="form-control" @bind="accountNumber" required />
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="accountType" class="form-label">Account Type *</label>
-                                    <InputSelect id="accountType" class="form-select" @bind="newAccountDto.AccountType">
+                                    <select id="accountType" class="form-select" @bind="accountType" required>
                                         <option value="">Select Account Type</option>
                                         <option value="Checking">Checking</option>
                                         <option value="Savings">Savings</option>
-                                    </InputSelect>
-                                    <ValidationMessage For="@(() => newAccountDto.AccountType)" class="text-danger" />
+                                    </select>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="balance" class="form-label">Initial Balance *</label>
-                                    <InputNumber id="balance" class="form-control" @bind="newAccountDto.Balance" />
-                                    <ValidationMessage For="@(() => newAccountDto.Balance)" class="text-danger" />
+                                    <input type="number" id="balance" class="form-control" @bind="balance" step="0.01" min="0.01" required />
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="dateOpened" class="form-label">Date Opened</label>
-                                    <InputDate id="dateOpened" class="form-control" @bind="newAccountDto.DateOpened" />
-                                    <ValidationMessage For="@(() => newAccountDto.DateOpened)" class="text-danger" />
+                                    <input type="date" id="dateOpened" class="form-control" @bind="dateOpened" />
                                 </div>
                             </div>
                         </div>
@@ -109,59 +86,91 @@
                         <div class="row mt-4">
                             <div class="col-12">
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <button type="button" class="btn btn-secondary me-md-2" @onclick="() => Navigation.NavigateTo("/")">
+                                    <button type="button" class="btn btn-secondary me-md-2" onclick="window.location.href='/'">
                                         Cancel
                                     </button>
-                                    <button type="submit" class="btn btn-primary" disabled="@isSubmitting">
-                                        @if (isSubmitting)
-                                        {
-                                            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                                            <span>Creating...</span>
-                                        }
-                                        else
-                                        {
-                                            <i class="fas fa-plus-circle me-2"></i>
-                                            <span>Create Account</span>
-                                        }
+                                    <button type="submit" id="submitBtn" class="btn btn-primary">
+                                        <i class="fas fa-plus-circle me-2"></i>
+                                        <span>Create Account (JavaScript)</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
-                    </EditForm>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-@code {
-    private CreateCustomerAccountDto newAccountDto = new();
-    private CustomerAccountDto? newAccount;
-    private bool isSubmitting = false;
-    private bool showSuccessMessage = false;
-    private string? errorMessage;
+<!-- This page uses pure JavaScript - no Blazor code section needed -->
 
-    private async Task HandleValidSubmit()
-    {
-        try
-        {
-            isSubmitting = true;
-            errorMessage = null;
-            showSuccessMessage = false;
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    
+    if (!form) return;
 
-            newAccount = await CustomerAccountService.CreateCustomerAccountAsync(newAccountDto);
-            showSuccessMessage = true;
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const submitBtn = document.getElementById('submitBtn');
+        const originalText = submitBtn.innerHTML;
+        
+        try {
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Creating...';
+            
+            // Get form data
+            const formData = {
+                firstName: document.getElementById('firstName').value.trim(),
+                lastName: document.getElementById('lastName').value.trim(),
+                accountNumber: document.getElementById('accountNumber').value.trim(),
+                accountType: document.getElementById('accountType').value,
+                balance: parseFloat(document.getElementById('balance').value),
+                dateOpened: document.getElementById('dateOpened').value ? new Date(document.getElementById('dateOpened').value).toISOString() : null
+            };
 
-            // Reset form
-            newAccountDto = new CreateCustomerAccountDto();
+            // Validate required fields
+            if (!formData.firstName || !formData.lastName || !formData.accountNumber || !formData.accountType || !formData.balance || formData.balance <= 0) {
+                alert('Please fill in all required fields with valid values.');
+                return;
+            }
+
+            // Call API
+            const response = await fetch('/api/account', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert(`Success! Account created for ${result.customerName}. Account Number: ${result.accountNumber}, Balance: $${result.balance.toFixed(2)}`);
+                
+                // Reset form
+                form.reset();
+            } else {
+                let errorMessage = 'Failed to create customer account.';
+                if (result.message) {
+                    errorMessage = result.message;
+                }
+                alert(errorMessage);
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+            alert(`Error: ${error.message}`);
+        } finally {
+            // Restore button state
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
         }
-        catch (Exception ex)
-        {
-            errorMessage = $"Failed to create customer account: {ex.Message}";
-        }
-        finally
-        {
-            isSubmitting = false;
-        }
-    }
-}
+    });
+});
+</script>

@@ -1,0 +1,92 @@
+@page "/input-test"
+@using CAMS.Shared.DTOs
+
+<PageTitle>Input Test - The Special Bank of Burlington</PageTitle>
+
+<div class="container mt-4">
+    <h2>Input Test Page</h2>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Simple Input Test</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Simple Text Input:</label>
+                        <input type="text" class="form-control" @bind="testText" />
+                        <small class="form-text text-muted">You typed: @testText</small>
+                    </div>
+                    
+                    <button class="btn btn-primary" @onclick="UpdateText">Update Text</button>
+                    <p>Button clicked: @buttonText</p>
+                    
+                    <div class="mt-3">
+                        <button class="btn btn-success" @onclick="ToggleConnection">Toggle Connection</button>
+                        <p>Connection Status: <span class="badge @(isConnected ? "bg-success" : "bg-danger")">@(isConnected ? "Connected" : "Disconnected")</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Blazor Components Test</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Blazor InputText:</label>
+                        <InputText class="form-control" @bind="blazorText" />
+                        <small class="form-text text-muted">Blazor bound: @blazorText</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Number Input:</label>
+                        <InputNumber class="form-control" @bind="blazorNumber" />
+                        <small class="form-text text-muted">Number: @blazorNumber</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Select:</label>
+                        <InputSelect class="form-select" @bind="selectedOption">
+                            <option value="">Choose...</option>
+                            <option value="option1">Option 1</option>
+                            <option value="option2">Option 2</option>
+                        </InputSelect>
+                        <small class="form-text text-muted">Selected: @selectedOption</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string testText = "";
+    private string blazorText = "";
+    private int blazorNumber = 0;
+    private string selectedOption = "";
+    private string buttonText = "Not clicked";
+    private bool isConnected = false;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            isConnected = true;
+            StateHasChanged();
+        }
+    }
+
+    private void UpdateText()
+    {
+        buttonText = $"Clicked at {DateTime.Now:HH:mm:ss}";
+    }
+
+    private void ToggleConnection()
+    {
+        isConnected = !isConnected;
+    }
+}
