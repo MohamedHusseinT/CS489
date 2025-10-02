@@ -1,0 +1,116 @@
+@startuml ADS_Dental_Surgery_Domain_Model
+
+!theme plain
+
+title ADS Dental Surgery System - Domain Model Class Diagram
+
+abstract class User {
+    + userId : Long {PK}
+    + firstName : String {required}
+    + lastName : String {required}
+    + email : String {required, unique}
+    + phoneNumber : String {required}
+    + passwordHash : String {required}
+    + createdDate : DateTime
+    + lastLogin : DateTime {optional}
+}
+
+class Dentist {
+    + specialization : String {required}
+    + licenseNumber : String {required, unique}
+    + hireDate : DateTime {required}
+    + activeStatus : Boolean {default: true}
+}
+
+class Patient {
+    + dateOfBirth : DateTime {required}
+    + mailingAddress : String {required}
+    + emergencyContact : String {optional}
+    + insuranceInformation : String {optional}
+}
+
+class OfficeManager {
+    + employeeId : String {required, unique}
+    + department : String {required}
+    + permissions : String {required}
+}
+
+class Surgery {
+    + surgeryId : Long {PK}
+    + name : String {required}
+    + locationAddress : String {required}
+    + telephoneNumber : String {required}
+    + email : String {required}
+    + capacity : Integer {required}
+    + activeStatus : Boolean {default: true}
+}
+
+class Appointment {
+    + appointmentId : Long {PK}
+    + appointmentDate : DateTime {required}
+    + appointmentTime : TimeSpan {required}
+    + duration : Integer {required}
+    + status : Enum {Scheduled, Completed, Cancelled, Rescheduled}
+    + notes : String {optional}
+    + confirmationDate : DateTime {optional}
+    + createdDate : DateTime {required}
+}
+
+class AppointmentRequest {
+    + requestId : Long {PK}
+    + requestDate : DateTime {required}
+    + preferredDate : DateTime {optional}
+    + preferredTime : String {optional}
+    + urgency : Enum {Low, Medium, High}
+    + status : Enum {Pending, Approved, Rejected}
+    + notes : String {optional}
+    + contactMethod : String {required}
+}
+
+class Bill {
+    + billId : Long {PK}
+    + billAmount : Decimal {required}
+    + billDate : DateTime {required}
+    + dueDate : DateTime {required}
+    + status : Enum {Pending, Paid, Overdue}
+    + serviceDescription : String {required}
+    + paymentMethod : String {optional}
+    + paymentDate : DateTime {optional}
+}
+
+' Inheritance relationships
+User <|-- Dentist
+User <|-- Patient
+User <|-- OfficeManager
+
+' Core relationships
+Patient ||--o{ Appointment : "ScheduledFor"
+Dentist ||--o{ Appointment : "AssignedTo"
+Surgery ||--o{ Appointment : "LocatedAt"
+Patient ||--o{ Bill : "OwedBy"
+Patient ||--o{ AppointmentRequest : "RequestedBy"
+
+' Many-to-many relationship
+Dentist }o--o{ Surgery : "WorksAt"
+
+' Notes for business rules
+note right of Appointment
+  Business Rules:
+  - Dentist max 5 appointments/week
+  - Future dates only
+end note
+
+note right of AppointmentRequest
+  Validation:
+  - Check for outstanding bills
+  - Cannot book if unpaid dues
+end note
+
+note right of Surgery
+  Physical Locations:
+  - Multiple surgery locations
+  - Each location has capacity
+  - Address and contact info
+end note
+
+@enduml

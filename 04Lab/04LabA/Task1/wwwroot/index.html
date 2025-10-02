@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohamed's eLibrary</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+        h1 {
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        .api-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        .api-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+        .api-description {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .api-endpoint {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        .test-button {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            transition: background 0.3s;
+        }
+        .test-button:hover {
+            background: #45a049;
+        }
+        .result {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Mohamed's eLibrary</h1>
+        <p class="subtitle">ASP.NET Core Web API - Spring Boot Equivalent</p>
+        
+        <div class="api-section">
+            <div class="api-title">👨‍💼 Authors API</div>
+            <div class="api-description">
+                Retrieve authors and their books from the library database.
+            </div>
+            <div class="api-endpoint">GET /api/author/{id} - Get author's books</div>
+            <div class="api-endpoint">GET /api/author/{id}/Books - Alternative endpoint</div>
+            
+            <button class="test-button" onclick="testAuthorAPI(1)">Test Author 1</button>
+            <button class="test-button" onclick="testAuthorAPI(2)">Test Author 2</button>
+            <button class="test-button" onclick="testAuthorAPI(3)">Test Author 3</button>
+            
+            <div id="result" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="api-section">
+            <div class="api-title">🔧 Technical Details</div>
+            <div class="api-description">
+                This application demonstrates ASP.NET Core equivalents to Spring Boot concepts:
+                <ul>
+                    <li><strong>Entity Framework Core</strong> ≈ Spring Data JPA</li>
+                    <li><strong>Dependency Injection</strong> ≈ Spring IoC Container</li>
+                    <li><strong>Controllers</strong> ≈ Spring REST Controllers</li>
+                    <li><strong>DbContext</strong> ≈ Spring Repository Pattern</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="api-section">
+            <div class="api-title">🎯 .NET Equivalents</div>
+            <div class="api-description">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr><th style="text-align: left;">Spring Boot</th><th style="text-align: left;">ASP.NET Core</th></tr>
+                    <tr><td>@RestController</td><td>Controller : ControllerBase</td></tr>
+                    <tr><td>@Entity</td><td>Entity Classes with Data Annotations</td></tr>
+                    <tr><td>@Repository</td><td>DbContext</td></tr>
+                    <tr><td>@Autowired</td><td>Constructor Injection</td></tr>
+                    <tr><td>Application.java</td><td>Program.cs</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function testAuthorAPI(authorId) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = 'Testing API...';
+            
+            try {
+                const response = await fetch(`/api/author/${authorId}`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.textContent = `Response for Author ${authorId}:\n${JSON.stringify(data, null, 2)}`;
+                } else {
+                    resultDiv.textContent = `Error: ${response.status} - ${JSON.stringify(data, null, 2)}`;
+                }
+            } catch (error) {
+                resultDiv.textContent = `Network Error: ${error.message}`;
+            }
+        }
+
+        // Test API connection on page load
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch('/api/author/1');
+                if (response.ok) {
+                    console.log('✅ Mohamed\'s eLibrary API is running!');
+                }
+            } catch (error) {
+                console.log('❌ API not available:', error.message);
+            }
+        });
+    </script>
+</body>
+</html>
