@@ -1,23 +1,25 @@
 using System.Text.Json;
 using HRManagementApp.Models;
+using HRManagementApp.DTOs;
 
 namespace HRManagementApp.Services
 {
     /// <summary>
-    /// Service for JSON processing and formatting
+    /// Service for JSON processing and formatting using DTOs
     /// </summary>
     public class JsonService
     {
         private readonly JsonSerializerOptions _jsonOptions;
+        private readonly MappingService _mappingService;
         
         public JsonService()
         {
             _jsonOptions = new JsonSerializerOptions
             {
                 WriteIndented = true,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
+            _mappingService = new MappingService();
         }
         
         /// <summary>
@@ -29,8 +31,9 @@ namespace HRManagementApp.Services
             var sortedDepartments = departments
                 .OrderByDescending(d => d.TotalAnnualSalary)
                 .ToList();
-                
-            return JsonSerializer.Serialize(sortedDepartments, _jsonOptions);
+            
+            var departmentDtos = _mappingService.MapToDepartmentDtos(sortedDepartments);
+            return JsonSerializer.Serialize(departmentDtos, _jsonOptions);
         }
         
         /// <summary>
@@ -43,8 +46,9 @@ namespace HRManagementApp.Services
                 .OrderByDescending(e => e.YearsOfEmployment)
                 .ThenBy(e => e.LastName)
                 .ToList();
-                
-            return JsonSerializer.Serialize(sortedEmployees, _jsonOptions);
+            
+            var employeeDtos = _mappingService.MapToEmployeeDtos(sortedEmployees);
+            return JsonSerializer.Serialize(employeeDtos, _jsonOptions);
         }
         
         /// <summary>
