@@ -13,6 +13,7 @@ Also, each Department will have one Employee who serves as the Head of Departmen
 some Department(s) may NOT have Head of Department
 
 
+Based oon the logged in user, we can show valid options based on authentication
 
 
 
