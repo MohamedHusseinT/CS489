@@ -1,0 +1,63 @@
+@startuml HR_Management_Domain_Model
+
+!theme plain
+
+title Allied Building Contractors HR Management System - Domain Model
+
+class Department {
+    + departmentNo : Long {PK}
+    + name : String {required}
+    --
+    + GetEmployees() : List<Employee>
+    + GetHeadOfDepartment() : Employee?
+    + GetTotalAnnualSalary() : Decimal
+}
+
+class Employee {
+    + employeeNo : String {PK}
+    + firstName : String {required}
+    + lastName : String {required}
+    + dateOfBirth : DateTime {required}
+    + dateOfEmployment : DateTime {required}
+    + biweeklySalary : Decimal {required}
+    + departmentNo : Long {FK}
+    --
+    + GetYearsOfEmployment() : Int
+    + GetAnnualSalary() : Decimal
+}
+
+' Relationships
+Department ||--o{ Employee : "employs"
+Department ||--o| Employee : "headed by"
+
+' Notes for business rules
+note right of Department
+  Business Rules:
+  - One Department can have many Employees
+  - One Department can have 0 or 1 Head of Department
+  - Department can exist without Head (vacancy)
+end note
+
+note right of Employee
+  Business Rules:
+  - Every Employee must belong to a Department
+  - Employee cannot exist without Department
+  - Years of employment calculated from dateOfEmployment
+end note
+
+note bottom of Department
+  Sample Data:
+  - Sales (31288741190182539912)
+  - Marketing (29274582650152771644) 
+  - Engineering (29274599650152771609)
+end note
+
+note bottom of Employee
+  Sample Data:
+  - Michael Philips (000-11-1234)
+  - Anna Smith (000-61-0987)
+  - John Hammonds (000-99-1766)
+  - Barbara Jones (000-41-1768)
+end note
+
+@enduml
