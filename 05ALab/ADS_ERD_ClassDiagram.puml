@@ -1,0 +1,95 @@
+@startuml
+!theme plain
+skinparam linetype ortho
+skinparam class {
+    BackgroundColor lightyellow
+    BorderColor black
+    ArrowColor black
+}
+
+title Advantis Dental Surgeries (ADS) - Entity Relationship Diagram
+note top : Lab 05A - CS489 Applied Software Development\nStudent: Mohamed
+
+class Dentists {
+  + dentist_id : INTEGER <<PK>>
+  + first_name : TEXT
+  + last_name : TEXT
+  + contact_phone : TEXT
+  + email : TEXT <<UNIQUE>>
+  + specialization : TEXT
+  + created_date : DATETIME
+}
+
+class Patients {
+  + patient_id : INTEGER <<PK>>
+  + first_name : TEXT
+  + last_name : TEXT
+  + contact_phone : TEXT
+  + email : TEXT <<UNIQUE>>
+  + mailing_address : TEXT
+  + date_of_birth : DATE
+  + created_date : DATETIME
+}
+
+class Surgeries {
+  + surgery_id : INTEGER <<PK>>
+  + surgery_name : TEXT
+  + location_address : TEXT
+  + telephone : TEXT
+  + created_date : DATETIME
+}
+
+class Appointments {
+  + appointment_id : INTEGER <<PK>>
+  + dentist_id : INTEGER <<FK>>
+  + patient_id : INTEGER <<FK>>
+  + surgery_id : INTEGER <<FK>>
+  + appointment_date : DATE
+  + appointment_time : TIME
+  + status : TEXT
+  + notes : TEXT
+  + created_date : DATETIME
+}
+
+class Bills {
+  + bill_id : INTEGER <<PK>>
+  + patient_id : INTEGER <<FK>>
+  + appointment_id : INTEGER <<FK>>
+  + amount : DECIMAL(10,2)
+  + bill_date : DATE
+  + due_date : DATE
+  + status : TEXT
+  + description : TEXT
+  + created_date : DATETIME
+}
+
+' Relationships
+Dentists ||--o{ Appointments : "has"
+Patients ||--o{ Appointments : "books"
+Surgeries ||--o{ Appointments : "hosts"
+Patients ||--o{ Bills : "receives"
+Appointments ||--o{ Bills : "generates"
+
+' Business Rules
+note right of Appointments
+  Business Rules:
+  - Status: Scheduled, Completed, Cancelled, No-Show
+  - Dentist weekly limit: 5 appointments
+end note
+
+note right of Bills
+  Business Rules:
+  - Status: Outstanding, Paid, Overdue
+  - Outstanding bills prevent new appointments
+end note
+
+note bottom
+  Sample Data:
+  - 3 Dentists (Tony Smith, Helen Pearson, Robin Plevin)
+  - 4 Patients (Gillian White, Jill Bell, Ian MacKay, John Walker)
+  - 3 Surgeries (Downtown, North End, South Side)
+  - 6 Appointments (based on provided sample data)
+  - 6 Bills (tracking payment status)
+end note
+
+@enduml

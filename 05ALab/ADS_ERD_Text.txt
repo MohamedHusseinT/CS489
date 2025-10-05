@@ -1,0 +1,86 @@
+# Advantis Dental Surgeries (ADS) - Entity Relationship Diagram
+## Lab 05A - CS489 Applied Software Development
+## Student: Mohamed
+
+```
+                    ┌─────────────────┐
+                    │    Dentists     │
+                    │─────────────────│
+                    │ dentist_id (PK) │
+                    │ first_name      │
+                    │ last_name       │
+                    │ contact_phone   │
+                    │ email (UNIQUE)  │
+                    │ specialization  │
+                    │ created_date    │
+                    └─────────────────┘
+                            │
+                            │ 1
+                            │
+                            │ 0..*
+                            │
+                    ┌─────────────────┐
+                    │  Appointments   │
+                    │─────────────────│
+                    │appointment_id(PK)│
+                    │ dentist_id (FK) │
+                    │ patient_id (FK) │
+                    │ surgery_id (FK) │
+                    │appointment_date │
+                    │appointment_time │
+                    │ status          │
+                    │ notes           │
+                    │ created_date    │
+                    └─────────────────┘
+                            │
+                            │ 1
+                            │
+                            │ 0..*
+                            │
+                    ┌─────────────────┐
+                    │     Bills       │
+                    │─────────────────│
+                    │ bill_id (PK)    │
+                    │ patient_id (FK) │
+                    │appointment_id(FK)│
+                    │ amount          │
+                    │ bill_date       │
+                    │ due_date        │
+                    │ status          │
+                    │ description     │
+                    │ created_date    │
+                    └─────────────────┘
+
+┌─────────────────┐         ┌─────────────────┐
+│    Patients     │         │   Surgeries     │
+│─────────────────│         │─────────────────│
+│ patient_id (PK) │         │ surgery_id (PK) │
+│ first_name      │         │ surgery_name    │
+│ last_name       │         │location_address │
+│ contact_phone   │         │ telephone       │
+│ email (UNIQUE)  │         │ created_date    │
+│mailing_address  │         └─────────────────┘
+│ date_of_birth   │
+│ created_date    │
+└─────────────────┘
+```
+
+## Relationships:
+- Dentists (1) ←→ (M) Appointments: "has"
+- Patients (1) ←→ (M) Appointments: "books"  
+- Surgeries (1) ←→ (M) Appointments: "hosts"
+- Patients (1) ←→ (M) Bills: "receives"
+- Appointments (1) ←→ (M) Bills: "generates"
+
+## Business Rules:
+- Appointment Status: Scheduled, Completed, Cancelled, No-Show
+- Bill Status: Outstanding, Paid, Overdue
+- Dentist weekly limit: 5 appointments
+- Outstanding bills prevent new appointments
+
+## Sample Data:
+- 3 Dentists (Tony Smith, Helen Pearson, Robin Plevin)
+- 4 Patients (Gillian White, Jill Bell, Ian MacKay, John Walker)
+- 3 Surgeries (Downtown, North End, South Side)
+- 6 Appointments (based on provided sample data)
+- 6 Bills (tracking payment status)

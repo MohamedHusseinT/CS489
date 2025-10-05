@@ -1,0 +1,64 @@
+@startuml
+title Advantis Dental Surgeries (ADS) - Entity Relationship Diagram
+note top : Lab 05A - CS489 Applied Software Development\nStudent: Mohamed
+
+class Dentists {
+  dentist_id : INTEGER
+  first_name : TEXT
+  last_name : TEXT
+  contact_phone : TEXT
+  email : TEXT
+  specialization : TEXT
+  created_date : DATETIME
+}
+
+class Patients {
+  patient_id : INTEGER
+  first_name : TEXT
+  last_name : TEXT
+  contact_phone : TEXT
+  email : TEXT
+  mailing_address : TEXT
+  date_of_birth : DATE
+  created_date : DATETIME
+}
+
+class Surgeries {
+  surgery_id : INTEGER
+  surgery_name : TEXT
+  location_address : TEXT
+  telephone : TEXT
+  created_date : DATETIME
+}
+
+class Appointments {
+  appointment_id : INTEGER
+  dentist_id : INTEGER
+  patient_id : INTEGER
+  surgery_id : INTEGER
+  appointment_date : DATE
+  appointment_time : TIME
+  status : TEXT
+  notes : TEXT
+  created_date : DATETIME
+}
+
+class Bills {
+  bill_id : INTEGER
+  patient_id : INTEGER
+  appointment_id : INTEGER
+  amount : DECIMAL
+  bill_date : DATE
+  due_date : DATE
+  status : TEXT
+  description : TEXT
+  created_date : DATETIME
+}
+
+Dentists ||--o{ Appointments
+Patients ||--o{ Appointments
+Surgeries ||--o{ Appointments
+Patients ||--o{ Bills
+Appointments ||--o{ Bills
+
+@enduml
