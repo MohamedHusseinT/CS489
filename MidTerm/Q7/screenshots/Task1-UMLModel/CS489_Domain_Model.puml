@@ -1,0 +1,66 @@
+
+@startuml
+title CS489 - Apartments Leasing Management - Domain Model
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+
+class Apartment {
+  +apartmentId : Integer <<PK>>
+  +apartmentNumber : String <<required>>
+  +propertyName : String <<required>>
+  +floorNo : Integer
+  +size : Decimal
+  +numberOfRooms : Integer
+}
+
+class Address {
+  +addressId : Integer <<PK>>
+  +apartmentNumber : String
+  +street : String
+  +city : String
+  +state : String
+  +zipCode : String
+}
+
+class Tenant {
+  +tenantId : Integer <<PK>>
+  +firstName : String <<required>>
+  +lastName : String <<required>>
+  +phoneNumber : String <<required>>
+  +email : String
+}
+
+class Lease {
+  +leaseId : Integer <<PK>>
+  +leaseNumber : String <<required, unique>>
+  +startDate : Date <<required>>
+  +endDate : Date <<required>>
+  +monthlyRentalRate : Decimal <<required>>
+}
+
+' Relationships and multiplicities
+Apartment "1" -- "1" Address : located at >
+Apartment "1" o-- "0..*" Lease : has >
+Tenant "1" o-- "1..*" Lease : signs >
+
+' Each Lease belongs to exactly one Apartment and one Tenant
+Lease "1" -- "1" Apartment : for >
+Lease "1" -- "1" Tenant : lease-holder >
+
+note right of Apartment
+- Some Apartments may have 0 Leases
+- Each Apartment has exactly 1 Address
+end note
+
+note right of Tenant
+- Each Tenant must have at least 1 Lease
+end note
+
+note right of Lease
+- leaseNumber must be UNIQUE
+- A Lease must have an Apartment and a Tenant
+end note
+
+@enduml

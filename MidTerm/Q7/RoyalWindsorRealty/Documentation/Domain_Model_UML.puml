@@ -1,0 +1,97 @@
+@startuml
+!theme plain
+skinparam linetype ortho
+skinparam class {
+    BackgroundColor lightblue
+    BorderColor black
+    ArrowColor black
+}
+
+title Royal Windsor Realty - Domain Model UML Class Diagram
+note top : MidTerm/Q7 - CS489 Applied Software Development\nStudent: Mohamed
+
+class Address {
+  + apartmentNumber : string
+  + street : string
+  + city : string
+  + state : string
+  + zipCode : string
+  --
+  + GetFullAddress() : string
+}
+
+class Apartment {
+  + apartmentId : int <<PK>>
+  + apartmentNumber : string
+  + propertyName : string
+  + floorNo : int?
+  + size : int
+  + numberOfRooms : int
+  --
+  + GetTotalRevenue() : decimal
+  + GetActiveLeases() : List<Lease>
+}
+
+class Tenant {
+  + tenantId : int <<PK>>
+  + firstName : string
+  + lastName : string
+  + phoneNumber : string
+  + email : string?
+  --
+  + GetFullName() : string
+  + GetTotalLeases() : int
+  + GetTotalRentPaid() : decimal
+}
+
+class Lease {
+  + leaseId : int <<PK>>
+  + leaseNumber : string <<UNIQUE>>
+  + startDate : DateTime
+  + endDate : DateTime
+  + monthlyRentalRate : decimal
+  + apartmentId : int <<FK>>
+  + tenantId : int <<FK>>
+  --
+  + GetLeaseDuration() : int
+  + GetTotalRevenue() : decimal
+  + IsActive() : bool
+}
+
+' Relationships
+Address ||--|| Apartment : "located at"
+Apartment ||--o{ Lease : "has"
+Tenant ||--o{ Lease : "holds"
+
+' Business Rules
+note right of Apartment
+  Business Rules:
+  - One apartment per address
+  - Can have multiple leases over time
+  - Size in square feet
+end note
+
+note right of Lease
+  Business Rules:
+  - Every lease must have apartment
+  - Every lease must have tenant
+  - Lease number must be unique
+  - Revenue = monthly rate × duration
+end note
+
+note right of Tenant
+  Business Rules:
+  - Every tenant must have ≥1 lease
+  - Can hold multiple leases
+  - Email is optional
+end note
+
+note bottom
+  Sample Data:
+  - 3 Apartments (K1210, B1109, G815)
+  - 2 Tenants (Robert Lanskov, Anna Smith)
+  - 4 Leases (D0187-175, W1736-142, DD001-142, P162-0017)
+  - Revenue calculated per lease duration
+end note
+
+@enduml

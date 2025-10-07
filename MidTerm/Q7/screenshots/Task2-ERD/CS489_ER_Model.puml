@@ -1,0 +1,54 @@
+
+@startuml
+title CS489 - Apartments Leasing Management - ER Model (Relational)
+
+skinparam shadowing false
+skinparam linetype ortho
+
+entity "Address" as Address {
+  * addressId : INT <<PK>>
+  --
+  apartmentNumber : VARCHAR
+  street : VARCHAR
+  city : VARCHAR
+  state : CHAR(2)
+  zipCode : VARCHAR
+}
+
+entity "Apartment" as Apartment {
+  * apartmentId : INT <<PK>>
+  addressId : INT <<FK>>
+  --
+  apartmentNumber : VARCHAR <<NOT NULL>>
+  propertyName : VARCHAR <<NOT NULL>>
+  floorNo : INT
+  size : DECIMAL(10,2)
+  numberOfRooms : INT
+}
+
+entity "Tenant" as Tenant {
+  * tenantId : INT <<PK>>
+  --
+  firstName : VARCHAR <<NOT NULL>>
+  lastName : VARCHAR <<NOT NULL>>
+  phoneNumber : VARCHAR <<NOT NULL>>
+  email : VARCHAR
+}
+
+entity "Lease" as Lease {
+  * leaseId : INT <<PK>>
+  apartmentId : INT <<FK>>
+  tenantId : INT <<FK>>
+  --
+  leaseNumber : VARCHAR <<UNIQUE, NOT NULL>>
+  startDate : DATE <<NOT NULL>>
+  endDate : DATE <<NOT NULL>>
+  monthlyRentalRate : DECIMAL(10,2) <<NOT NULL>>
+}
+
+' Relationships with cardinalities (crow's foot-like annotations)
+Address ||--|| Apartment : "is address of"
+Apartment ||--o{ Lease : "has"
+Tenant ||--o{ Lease : "signs"
+
+@enduml

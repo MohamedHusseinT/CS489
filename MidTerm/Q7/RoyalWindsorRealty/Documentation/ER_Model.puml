@@ -1,0 +1,93 @@
+@startuml
+!theme plain
+skinparam linetype ortho
+skinparam class {
+    BackgroundColor lightyellow
+    BorderColor black
+    ArrowColor black
+}
+
+title Royal Windsor Realty - E-R Model for Database
+note top : MidTerm/Q7 - CS489 Applied Software Development\nStudent: Mohamed
+
+entity "Addresses" as addr {
+  * apartment_number : TEXT <<PK>>
+  --
+  * street : TEXT
+  * city : TEXT
+  * state : TEXT
+  * zip_code : TEXT
+}
+
+entity "Apartments" as apt {
+  * apartment_id : INTEGER <<PK>>
+  * apartment_number : TEXT <<FK>>
+  * property_name : TEXT
+  * floor_no : INTEGER
+  * size : INTEGER
+  * number_of_rooms : INTEGER
+}
+
+entity "Tenants" as tenant {
+  * tenant_id : INTEGER <<PK>>
+  --
+  * first_name : TEXT
+  * last_name : TEXT
+  * phone_number : TEXT
+  * email : TEXT
+}
+
+entity "Leases" as lease {
+  * lease_id : INTEGER <<PK>>
+  * lease_number : TEXT <<UNIQUE>>
+  * start_date : DATE
+  * end_date : DATE
+  * monthly_rental_rate : DECIMAL(10,2)
+  * apartment_id : INTEGER <<FK>>
+  * tenant_id : INTEGER <<FK>>
+}
+
+' Relationships
+addr ||--|| apt : "located at"
+apt ||--o{ lease : "has"
+tenant ||--o{ lease : "holds"
+
+' Business Rules
+note right of apt
+  Database Constraints:
+  - apartment_number UNIQUE
+  - size > 0
+  - number_of_rooms > 0
+  - floor_no >= 0
+end note
+
+note right of lease
+  Database Constraints:
+  - lease_number UNIQUE
+  - start_date < end_date
+  - monthly_rental_rate > 0
+  - apartment_id NOT NULL
+  - tenant_id NOT NULL
+end note
+
+note right of tenant
+  Database Constraints:
+  - first_name NOT NULL
+  - last_name NOT NULL
+  - phone_number NOT NULL
+  - email can be NULL
+end note
+
+note bottom
+  Sample Data:
+  - 3 Addresses (K1210, B1109, G815)
+  - 3 Apartments (Bells Court, The Galleria)
+  - 2 Tenants (Robert Lanskov, Anna Smith)
+  - 4 Leases (D0187-175, W1736-142, DD001-142, P162-0017)
+  
+  Revenue Calculation:
+  revenue_earned = monthly_rental_rate × 
+    (DATEDIFF(end_date, start_date) / 30.44)
+end note
+
+@enduml
