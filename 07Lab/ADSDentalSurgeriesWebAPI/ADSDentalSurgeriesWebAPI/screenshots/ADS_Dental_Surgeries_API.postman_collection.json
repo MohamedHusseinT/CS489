@@ -1,0 +1,190 @@
+{
+	"info": {
+		"_postman_id": "ads-dental-surgeries-api",
+		"name": "ADS Dental Surgeries API",
+		"description": "RESTful Web API for ADS Dental Surgeries Appointment Management System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. GET All patientss",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}adsweb/api/v1/patients",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"adsweb",
+						"api",
+						"v1",
+						"patients"
+					]
+				},
+				"description": "Displays the list of all patientss, including their primaryaddresseses, sorted in ascending order by their lastName, in JSON format."
+			},
+			"response": []
+		},
+		{
+			"name": "2. GET patients by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}adsweb/api/v1/patients/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"adsweb",
+						"api",
+						"v1",
+						"patients",
+						"1"
+					]
+				},
+				"description": "Displays the data for patients whose patientsId is 1 including the primaryaddresses, in JSON format."
+			},
+			"response": []
+		},
+		{
+			"name": "3. POST Create patients",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"patientNumber\": \"P999\",\n  \"firstName\": \"Test\",\n  \"lastName\": \"patients\",\n  \"phoneNumber\": \"(602) 555-9999\",\n  \"email\": \"test.patient@email.com\",\n  \"dateOfBirth\": \"1990-01-01T00:00:00Z\",\n  \"mailingaddresses\": \"123 Test Street\",\n  \"addressId\": 1\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}adsweb/api/v1/patients",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"adsweb",
+						"api",
+						"v1",
+						"patients"
+					]
+				},
+				"description": "Register a new patients into the system."
+			},
+			"response": []
+		},
+		{
+			"name": "4. PUT Update patients",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"patientNumber\": \"P100\",\n  \"firstName\": \"Gillian\",\n  \"lastName\": \"White\",\n  \"phoneNumber\": \"(602) 555-0301\",\n  \"email\": \"gillian.white.updated@email.com\",\n  \"dateOfBirth\": \"1985-05-15T00:00:00Z\",\n  \"mailingaddresses\": \"123 Main Street, Updated\",\n  \"addressId\": 1\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}adsweb/api/v1/patients/patient/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"adsweb",
+						"api",
+						"v1",
+						"patients",
+						"patient",
+						"1"
+					]
+				},
+				"description": "Retrieves and updates patients data for the patient whose patientId is 1."
+			},
+			"response": []
+		},
+		{
+			"name": "5. DELETE patients",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}adsweb/api/v1/patients/patient/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"adsweb",
+						"api",
+						"v1",
+						"patients",
+						"patient",
+						"1"
+					]
+				},
+				"description": "Deletes the patients data for the patient whose patientId is 1."
+			},
+			"response": []
+		},
+		{
+			"name": "6. Search patientss",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}adsweb/api/v1/patients/patient/search/Gillian",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"adsweb",
+						"api",
+						"v1",
+						"patients",
+						"patient",
+						"search",
+						"Gillian"
+					]
+				},
+				"description": "Queries all the patients data for the patient(s) whose data matches the input searchString."
+			},
+			"response": []
+		},
+		{
+			"name": "7. GET All addresseses",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}adsweb/api/v1/addresses",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"adsweb",
+						"api",
+						"v1",
+						"addresses"
+					]
+				},
+				"description": "Displays the list of all addresseses, including the patients data, sorted in ascending order by their city, in JSON format."
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+		"key": "baseUrl",
+		"value": "http://localhost:5000",
+		"type": "string"
+		}
+	]
+}
