@@ -1,0 +1,152 @@
+@model ADSDentalSurgeriesWebApp.ViewModels.AddressListViewModel
+@{
+    ViewData["Title"] = "Addresses";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="display-6 text-primary">
+                        <i class="fas fa-map-marker-alt me-2"></i>Addresses
+                    </h1>
+                    <p class="text-muted">Manage address records and locations</p>
+                </div>
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Add New Address
+                </a>
+            </div>
+
+            <!-- Search Form -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <form asp-action="Index" method="get" class="row g-3">
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                                <input type="text" class="form-control" name="searchTerm" 
+                                       value="@Model.SearchTerm" placeholder="Search addresses by street, city, state, or zip code...">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-outline-primary">
+                                    <i class="fas fa-search me-1"></i>Search
+                                </button>
+                                <a asp-action="Index" class="btn btn-outline-secondary">
+                                    <i class="fas fa-times me-1"></i>Clear
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Results Summary -->
+            <div class="alert alert-info d-flex align-items-center" role="alert">
+                <i class="fas fa-info-circle me-2"></i>
+                <div>
+                    <strong>@Model.TotalCount</strong> address(es) found
+                    @if (!string.IsNullOrEmpty(Model.SearchTerm))
+                    {
+                        <span>for "<strong>@Model.SearchTerm</strong>"</span>
+                    }
+                </div>
+            </div>
+
+            <!-- Addresses Table -->
+            @if (Model.Addresses.Any())
+            {
+                <div class="card shadow-sm">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Address</th>
+                                        <th>City</th>
+                                        <th>State</th>
+                                        <th>Zip Code</th>
+                                        <th>Patients</th>
+                                        <th>Surgeries</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var address in Model.Addresses)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@address.Street</strong>
+                                                @if (!string.IsNullOrEmpty(address.Country))
+                                                {
+                                                    <br><small class="text-muted">@address.Country</small>
+                                                }
+                                            </td>
+                                            <td>
+                                                <i class="fas fa-city me-1 text-muted"></i>@address.City
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-secondary">@address.State</span>
+                                            </td>
+                                            <td>
+                                                <code>@address.ZipCode</code>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-success">@address.PatientCount</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-info">@address.SurgeryCount</span>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    <a asp-action="Details" asp-route-id="@address.AddressId" 
+                                                       class="btn btn-outline-info" title="View Details">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <a asp-action="Edit" asp-route-id="@address.AddressId" 
+                                                       class="btn btn-outline-warning" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a asp-action="Delete" asp-route-id="@address.AddressId" 
+                                                       class="btn btn-outline-danger" title="Delete">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card shadow-sm">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-map-marker-slash fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No addresses found</h5>
+                        <p class="text-muted">
+                            @if (string.IsNullOrEmpty(Model.SearchTerm))
+                            {
+                                <span>Get started by adding your first address.</span>
+                            }
+                            else
+                            {
+                                <span>No addresses match your search criteria.</span>
+                            }
+                        </p>
+                        <a asp-action="Create" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Add New Address
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,290 @@
+@model ADSDentalSurgeriesWebApp.ViewModels.PatientViewModel
+@{
+    ViewData["Title"] = "Patient Details";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="display-6 text-primary">
+                        <i class="fas fa-user me-2"></i>Patient Details
+                    </h1>
+                    <p class="text-muted">View patient information and records</p>
+                </div>
+                <div class="btn-group" role="group">
+                    <a asp-action="Edit" asp-route-id="@Model.PatientId" class="btn btn-warning">
+                        <i class="fas fa-edit me-2"></i>Edit
+                    </a>
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to List
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Patient Information -->
+                <div class="col-md-8">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-user me-2"></i>Patient Information
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Patient Number</label>
+                                        <div class="fs-5">
+                                            <span class="badge bg-secondary fs-6">@Model.PatientNumber</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Full Name</label>
+                                        <div class="fs-5 fw-bold">@Model.FullName</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">First Name</label>
+                                        <div class="fs-6">@Model.FirstName</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Last Name</label>
+                                        <div class="fs-6">@Model.LastName</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Email Address</label>
+                                        <div class="fs-6">
+                                            @if (!string.IsNullOrEmpty(Model.Email))
+                                            {
+                                                <a href="mailto:@Model.Email" class="text-decoration-none">
+                                                    <i class="fas fa-envelope me-1"></i>@Model.Email
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">No email provided</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Phone Number</label>
+                                        <div class="fs-6">
+                                            @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                                            {
+                                                <a href="tel:@Model.PhoneNumber" class="text-decoration-none">
+                                                    <i class="fas fa-phone me-1"></i>@Model.PhoneNumber
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">No phone provided</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if (Model.DateOfBirth.HasValue)
+                            {
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label text-muted">Date of Birth</label>
+                                            <div class="fs-6">
+                                                <i class="fas fa-calendar me-1"></i>@Model.DateOfBirth.Value.ToString("MMMM dd, yyyy")
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label text-muted">Age</label>
+                                            <div class="fs-6">
+                                                @{
+                                                    var age = DateTime.Now.Year - Model.DateOfBirth.Value.Year;
+                                                    if (DateTime.Now.DayOfYear < Model.DateOfBirth.Value.DayOfYear)
+                                                    {
+                                                        age--;
+                                                    }
+                                                }
+                                                <i class="fas fa-birthday-cake me-1"></i>@age years old
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.MailingAddress))
+                            {
+                                <div class="mb-3">
+                                    <label class="form-label text-muted">Mailing Address</label>
+                                    <div class="fs-6">
+                                        <i class="fas fa-home me-1"></i>@Model.MailingAddress
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="mb-3">
+                                <label class="form-label text-muted">Registration Date</label>
+                                <div class="fs-6">
+                                    <i class="fas fa-calendar-plus me-1"></i>@Model.CreatedDate.ToString("MMMM dd, yyyy 'at' h:mm tt")
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Address Information -->
+                <div class="col-md-4">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-map-marker-alt me-2"></i>Primary Address
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            @if (Model.Address != null)
+                            {
+                                <div class="mb-2">
+                                    <strong>@Model.Address.Street</strong>
+                                </div>
+                                <div class="mb-2">
+                                    @Model.Address.City, @Model.Address.State @Model.Address.ZipCode
+                                </div>
+                                @if (!string.IsNullOrEmpty(Model.Address.Country))
+                                {
+                                    <div class="text-muted small">
+                                        @Model.Address.Country
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="text-muted">
+                                    <i class="fas fa-exclamation-triangle me-1"></i>No address assigned
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-chart-bar me-2"></i>Quick Stats
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-12 mb-3">
+                                    <div class="stat-item">
+                                        <h3 class="text-primary">@(Model.Appointments?.Count ?? 0)</h3>
+                                        <p class="text-muted mb-0">Total Appointments</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appointments -->
+            @if (Model.Appointments != null && Model.Appointments.Any())
+            {
+                <div class="card shadow-sm">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-calendar-check me-2"></i>Appointments (@Model.Appointments.Count)
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-warning">
+                                    <tr>
+                                        <th>Appointment Number</th>
+                                        <th>Date & Time</th>
+                                        <th>Dentist</th>
+                                        <th>Surgery</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var appointment in Model.Appointments)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <span class="badge bg-secondary">@appointment.AppointmentNumber</span>
+                                            </td>
+                                            <td>
+                                                <strong>@appointment.FormattedDateTime</strong>
+                                            </td>
+                                            <td>
+                                                @if (appointment.Dentist != null)
+                                                {
+                                                    <span>@appointment.Dentist.FullName</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">Not assigned</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (appointment.Surgery != null)
+                                                {
+                                                    <span>@appointment.Surgery.Name</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">Not assigned</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-success">@appointment.Status</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card shadow-sm">
+                    <div class="card-body text-center py-4">
+                        <i class="fas fa-calendar-times fa-2x text-muted mb-3"></i>
+                        <h5 class="text-muted">No Appointments</h5>
+                        <p class="text-muted">This patient has no scheduled appointments.</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .stat-item h3 {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+</style>
