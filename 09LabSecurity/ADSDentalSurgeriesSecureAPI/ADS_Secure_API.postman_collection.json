@@ -1,0 +1,396 @@
+{
+  "info": {
+    "_postman_id": "ads-secure-api-lab9",
+    "name": "ADS Secure API - Lab 9",
+    "description": "Token-based Authentication and Role-based Authorization for ADS Dental Surgeries API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "1. Login - Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"jwt_token\", jsonData.token);",
+                  "    pm.environment.set(\"user_id\", jsonData.user.userId);",
+                  "    console.log(\"Token saved:\", jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usernameOrEmail\": \"admin\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/adsweb/api/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["adsweb", "api", "v1", "auth", "login"]
+            },
+            "description": "Login as Admin user to get JWT token"
+          }
+        },
+        {
+          "name": "2. Login - Dentist",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"jwt_token\", jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usernameOrEmail\": \"tony.smith\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/adsweb/api/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["adsweb", "api", "v1", "auth", "login"]
+            },
+            "description": "Login as Dentist user"
+          }
+        },
+        {
+          "name": "3. Login - Receptionist",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"jwt_token\", jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usernameOrEmail\": \"receptionist\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/adsweb/api/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["adsweb", "api", "v1", "auth", "login"]
+            },
+            "description": "Login as Receptionist user"
+          }
+        },
+        {
+          "name": "4. Register New User",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"newuser\",\n  \"email\": \"newuser@ads.com\",\n  \"password\": \"password123\",\n  \"firstName\": \"New\",\n  \"lastName\": \"User\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/adsweb/api/v1/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["adsweb", "api", "v1", "auth", "register"]
+            },
+            "description": "Register a new user account"
+          }
+        },
+        {
+          "name": "5. Get Current User Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/adsweb/api/v1/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["adsweb", "api", "v1", "auth", "me"]
+            },
+            "description": "Get current authenticated user information"
+          }
+        },
+        {
+          "name": "6. Health Check",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/adsweb/api/v1/auth/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["adsweb", "api", "v1", "auth", "health"]
+            },
+            "description": "Health check endpoint (no authentication required)"
+          }
+        }
+      ],
+      "description": "Authentication and user management endpoints"
+    },
+    {
+      "name": "Patients (Protected)",
+      "item": [
+        {
+          "name": "1. GET All Patients",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/adsweb/api/v1/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["adsweb", "api", "v1", "patients"]
+            },
+            "description": "Get all patients (requires DENTIST, RECEPTIONIST, or ADMIN role)"
+          }
+        },
+        {
+          "name": "2. GET Patient by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/adsweb/api/v1/patients/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["adsweb", "api", "v1", "patients", "1"]
+            },
+            "description": "Get patient by ID"
+          }
+        },
+        {
+          "name": "3. Create Patient",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientNumber\": \"P999\",\n  \"firstName\": \"Test\",\n  \"lastName\": \"Patient\",\n  \"phoneNumber\": \"(602) 555-9999\",\n  \"email\": \"test.patient@email.com\",\n  \"dateOfBirth\": \"1990-01-01T00:00:00Z\",\n  \"mailingAddress\": \"123 Test Street\",\n  \"addressId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/adsweb/api/v1/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["adsweb", "api", "v1", "patients"]
+            },
+            "description": "Create a new patient"
+          }
+        },
+        {
+          "name": "4. Update Patient",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientNumber\": \"P100\",\n  \"firstName\": \"Gillian\",\n  \"lastName\": \"White\",\n  \"phoneNumber\": \"(602) 555-0301\",\n  \"email\": \"gillian.white.updated@email.com\",\n  \"dateOfBirth\": \"1985-05-15T00:00:00Z\",\n  \"mailingAddress\": \"123 Main Street, Updated\",\n  \"addressId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/adsweb/api/v1/patients/patient/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["adsweb", "api", "v1", "patients", "patient", "1"]
+            },
+            "description": "Update patient information"
+          }
+        },
+        {
+          "name": "5. Delete Patient",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/adsweb/api/v1/patients/patient/5",
+              "host": ["{{baseUrl}}"],
+              "path": ["adsweb", "api", "v1", "patients", "patient", "5"]
+            },
+            "description": "Delete a patient"
+          }
+        },
+        {
+          "name": "6. Search Patients",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/adsweb/api/v1/patients/patient/search/Gillian",
+              "host": ["{{baseUrl}}"],
+              "path": ["adsweb", "api", "v1", "patients", "patient", "search", "Gillian"]
+            },
+            "description": "Search patients by name, email, or phone"
+          }
+        }
+      ],
+      "description": "Protected patient endpoints (requires authentication)"
+    },
+    {
+      "name": "Addresses (Protected)",
+      "item": [
+        {
+          "name": "1. GET All Addresses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/adsweb/api/v1/addresses",
+              "host": ["{{baseUrl}}"],
+              "path": ["adsweb", "api", "v1", "addresses"]
+            },
+            "description": "Get all addresses (requires ADMIN or RECEPTIONIST role)"
+          }
+        },
+        {
+          "name": "2. GET Address by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/adsweb/api/v1/addresses/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["adsweb", "api", "v1", "addresses", "1"]
+            },
+            "description": "Get address by ID"
+          }
+        }
+      ],
+      "description": "Protected address endpoints (requires ADMIN or RECEPTIONIST role)"
+    },
+    {
+      "name": "Unauthorized Access Tests",
+      "item": [
+        {
+          "name": "1. Access Protected Endpoint Without Token",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/adsweb/api/v1/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["adsweb", "api", "v1", "patients"]
+            },
+            "description": "Should return 401 Unauthorized"
+          }
+        },
+        {
+          "name": "2. Access with Invalid Token",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "invalid_token_here",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/adsweb/api/v1/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["adsweb", "api", "v1", "patients"]
+            },
+            "description": "Should return 401 Unauthorized"
+          }
+        }
+      ],
+      "description": "Test unauthorized access scenarios"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
+

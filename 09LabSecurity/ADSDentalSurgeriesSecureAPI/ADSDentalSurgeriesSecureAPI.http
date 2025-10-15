@@ -1,0 +1,6 @@
+@ADSDentalSurgeriesSecureAPI_HostAddress = http://localhost:5202
+
+GET {{ADSDentalSurgeriesSecureAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
