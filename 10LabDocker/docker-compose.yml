@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # Java CLI Application
+  java-cli-app:
+    build:
+      context: ./JavaCLIApp
+      dockerfile: Dockerfile
+    container_name: ads-java-cli-app
+    image: ads-java-cli-app:latest
+    restart: unless-stopped
+    networks:
+      - ads-network
+
+  # .NET Web API Application
+  dotnet-webapi:
+    build:
+      context: ./DotNetWebAPI
+      dockerfile: Dockerfile
+    container_name: ads-dotnet-webapi
+    image: ads-dotnet-webapi:latest
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    networks:
+      - ads-network
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+
+networks:
+  ads-network:
+    driver: bridge
+
+volumes:
+  ads-data:
+    driver: local
