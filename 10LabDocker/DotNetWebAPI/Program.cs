@@ -40,17 +40,16 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Enable Swagger in all environments for Docker container
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ADS Dental Surgeries Web API v1");
-        c.RoutePrefix = string.Empty; // Set Swagger UI at the app's root
-    });
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "ADS Dental Surgeries Web API v1");
+    c.RoutePrefix = "swagger"; // Set Swagger UI at /swagger
+});
 
-app.UseHttpsRedirection();
+// Disable HTTPS redirection in Docker environment
+// app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 
