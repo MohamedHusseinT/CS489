@@ -1,0 +1,96 @@
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				"ecr:CreateRepository",
+				"ecr:*"
+			],
+			"Resource": "*"
+		},
+		{
+			"Effect": "Allow",
+			"Action": "eks:*",
+			"Resource": "*"
+		},
+		{
+			"Sid": "Statement1",
+			"Effect": "Allow",
+			"Action": [
+				"eks-auth:*"
+			],
+			"Resource": "*"
+		},
+		{
+			"Sid": "Statement2",
+			"Effect": "Allow",
+			"Action": [
+				"ec2:*"
+			],
+			"Resource": [
+				"*"
+			]
+		},
+		{
+			"Sid": "Statement3",
+			"Effect": "Allow",
+			"Action": "iam:CreateServiceLinkedRole",
+			"Resource": "*"
+		},
+		{
+			"Sid": "Statement4",
+			"Effect": "Allow",
+			"Action": [
+				"iam:CreateRole",
+				"iam:DeleteRole",
+				"iam:AttachRolePolicy",
+				"iam:DetachRolePolicy",
+				"iam:PassRole",
+				"iam:GetRole",
+				"iam:ListRoles",
+				"iam:ListAttachedRolePolicies",
+				"iam:CreateInstanceProfile",
+				"iam:DeleteInstanceProfile",
+				"iam:AddRoleToInstanceProfile",
+				"iam:RemoveRoleFromInstanceProfile",
+				"iam:GetInstanceProfile",
+				"iam:ListInstanceProfiles",
+				"iam:ListInstanceProfilesForRole",
+				"iam:CreateOpenIDConnectProvider",
+				"iam:DeleteOpenIDConnectProvider",
+				"iam:GetOpenIDConnectProvider",
+				"iam:ListOpenIDConnectProviders",
+				"iam:TagOpenIDConnectProvider",
+				"iam:UntagOpenIDConnectProvider",
+				"iam:ListOpenIDConnectProviderTags",
+				"iam:CreatePolicy",
+				"iam:DeletePolicy",
+				"iam:GetPolicy",
+				"iam:GetPolicyVersion",
+				"iam:ListPolicies",
+				"iam:ListPolicyVersions",
+				"iam:TagPolicy",
+				"iam:UntagPolicy",
+				"iam:ListPolicyTags"
+			],
+			"Resource": "*"
+		},
+		{
+			"Sid": "Statement5",
+			"Effect": "Allow",
+			"Action": [
+				"cloudformation:*"
+			],
+			"Resource": "*"
+		},
+		{
+			"Sid": "Statement6",
+			"Effect": "Allow",
+			"Action": [
+				"logs:*"
+			],
+			"Resource": "*"
+		}
+	]
+}

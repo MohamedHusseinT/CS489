@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-cli-app
+  labels:
+    app: java-cli-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java-cli-app
+  template:
+    metadata:
+      labels:
+        app: java-cli-app
+    spec:
+      containers:
+      - name: java-cli-app
+        image: 711387107629.dkr.ecr.us-east-1.amazonaws.com/ads-dental/java-cli-app:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: java-cli-service
+  labels:
+    app: java-cli-app
+spec:
+  selector:
+    app: java-cli-app
+  ports:
+  - port: 8080
+    targetPort: 8080
+  type: ClusterIP
