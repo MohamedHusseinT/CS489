@@ -13,3 +13,6 @@ spec:
     nodePort: 30080
     protocol: TCP
   type: NodePort
+
+
+
