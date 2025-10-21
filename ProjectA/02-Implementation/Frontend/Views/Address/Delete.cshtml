@@ -1,0 +1,122 @@
+@model ADSDentalSurgeriesWebApp.ViewModels.AddressViewModel
+@{
+    ViewData["Title"] = "Delete Address";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="display-6 text-danger">
+                        <i class="fas fa-trash me-2"></i>Delete Address
+                    </h1>
+                    <p class="text-muted">Confirm deletion of address record</p>
+                </div>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to List
+                </a>
+            </div>
+
+            <div class="alert alert-warning" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>Warning!</strong> This action cannot be undone. Deleting this address will also affect any associated patients and surgeries.
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-danger mb-4">Are you sure you want to delete this address?</h5>
+                    
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label class="form-label text-muted">Street Address</label>
+                                <div class="fs-5 fw-bold">@Model.Street</div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">City</label>
+                                        <div class="fs-6">
+                                            <i class="fas fa-city me-1"></i>@Model.City
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">State</label>
+                                        <div class="fs-6">
+                                            <span class="badge bg-secondary">@Model.State</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Zip Code</label>
+                                        <div class="fs-6">
+                                            <code>@Model.ZipCode</code>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-muted">Full Address</label>
+                                <div class="fs-6">
+                                    <i class="fas fa-map-marker-alt me-1"></i>@Model.FullAddress
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card bg-light">
+                                <div class="card-body text-center">
+                                    <h6 class="card-title">Impact Summary</h6>
+                                    <div class="mb-2">
+                                        <span class="badge bg-danger fs-6">@Model.PatientCount</span>
+                                        <small class="text-muted d-block">Patients Affected</small>
+                                    </div>
+                                    <div class="mb-2">
+                                        <span class="badge bg-warning fs-6">@Model.SurgeryCount</span>
+                                        <small class="text-muted d-block">Surgeries Affected</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (Model.PatientCount > 0 || Model.SurgeryCount > 0)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <strong>Cannot Delete:</strong> This address is currently being used by 
+                            @Model.PatientCount patient(s) and @Model.SurgeryCount surgery(ies). 
+                            Please reassign or remove these associations before deleting the address.
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to List
+                            </a>
+                            <button type="button" class="btn btn-danger" disabled>
+                                <i class="fas fa-trash me-2"></i>Cannot Delete
+                            </button>
+                        </div>
+                    }
+                    else
+                    {
+                        <form asp-action="Delete" method="post" class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-2"></i>Delete Address
+                            </button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

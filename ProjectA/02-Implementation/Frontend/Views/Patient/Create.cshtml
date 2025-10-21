@@ -1,0 +1,136 @@
+@model ADSDentalSurgeriesWebApp.ViewModels.PatientViewModel
+@{
+    ViewData["Title"] = "Create Patient";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="display-6 text-primary">
+                        <i class="fas fa-user-plus me-2"></i>Create New Patient
+                    </h1>
+                    <p class="text-muted">Add a new patient to the system</p>
+                </div>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to List
+                </a>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="PatientNumber" class="form-label">
+                                        <i class="fas fa-id-card me-1"></i>Patient Number *
+                                    </label>
+                                    <input asp-for="PatientNumber" class="form-control" placeholder="e.g., P001" />
+                                    <span asp-validation-for="PatientNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="DateOfBirth" class="form-label">
+                                        <i class="fas fa-calendar me-1"></i>Date of Birth
+                                    </label>
+                                    <input asp-for="DateOfBirth" type="date" class="form-control" />
+                                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="FirstName" class="form-label">
+                                        <i class="fas fa-user me-1"></i>First Name *
+                                    </label>
+                                    <input asp-for="FirstName" class="form-control" placeholder="Enter first name" />
+                                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="LastName" class="form-label">
+                                        <i class="fas fa-user me-1"></i>Last Name *
+                                    </label>
+                                    <input asp-for="LastName" class="form-control" placeholder="Enter last name" />
+                                    <span asp-validation-for="LastName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Email" class="form-label">
+                                        <i class="fas fa-envelope me-1"></i>Email Address
+                                    </label>
+                                    <input asp-for="Email" type="email" class="form-control" placeholder="patient@example.com" />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="PhoneNumber" class="form-label">
+                                        <i class="fas fa-phone me-1"></i>Phone Number
+                                    </label>
+                                    <input asp-for="PhoneNumber" class="form-control" placeholder="(555) 123-4567" />
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="MailingAddress" class="form-label">
+                                <i class="fas fa-home me-1"></i>Mailing Address
+                            </label>
+                            <textarea asp-for="MailingAddress" class="form-control" rows="3" 
+                                      placeholder="Enter mailing address (if different from primary address)"></textarea>
+                            <span asp-validation-for="MailingAddress" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="AddressId" class="form-label">
+                                <i class="fas fa-map-marker-alt me-1"></i>Primary Address *
+                            </label>
+                            <select asp-for="AddressId" class="form-select">
+                                <option value="">Select an address...</option>
+                                @if (Model.AvailableAddresses != null)
+                                {
+                                    @foreach (var address in Model.AvailableAddresses)
+                                    {
+                                        <option value="@address.AddressId">@address.ToString()</option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="AddressId" class="text-danger"></span>
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Select the primary address for this patient. You can add new addresses from the Addresses page.
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Create Patient
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

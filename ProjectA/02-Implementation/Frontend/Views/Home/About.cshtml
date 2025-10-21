@@ -1,0 +1,154 @@
+@{
+    ViewData["Title"] = "About";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-header mb-4">
+                <h1 class="display-4 text-primary">
+                    <i class="fas fa-info-circle me-3"></i>About ADS Dental Surgeries
+                </h1>
+                <p class="lead">Comprehensive Dental Care Management System</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title text-primary">
+                        <i class="fas fa-tooth me-2"></i>Our Mission
+                    </h3>
+                    <p class="card-text">
+                        ADS Dental Surgeries is committed to providing comprehensive dental care management solutions. 
+                        Our system is designed to streamline patient management, appointment scheduling, and administrative 
+                        tasks for dental practices of all sizes.
+                    </p>
+                    
+                    <h4 class="mt-4 text-success">
+                        <i class="fas fa-cogs me-2"></i>System Features
+                    </h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            <strong>Patient Management:</strong> Complete patient records with personal information, medical history, and contact details
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            <strong>Address Management:</strong> Centralized address management for patients and surgery locations
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            <strong>Appointment Scheduling:</strong> Integrated appointment system with patient and dentist information
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            <strong>Search & Filter:</strong> Advanced search capabilities across all patient and address records
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            <strong>Responsive Design:</strong> Modern, mobile-friendly interface built with Bootstrap 5
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-info">
+                        <i class="fas fa-graduation-cap me-2"></i>Lab 8 - Full-Stack Development
+                    </h5>
+                    <p class="card-text">
+                        This application demonstrates full-stack web development using ASP.NET Core MVC, 
+                        Entity Framework Core, and modern web technologies.
+                    </p>
+                    
+                    <h6 class="mt-3 text-warning">
+                        <i class="fas fa-code me-2"></i>Technologies Used
+                    </h6>
+                    <ul class="list-unstyled small">
+                        <li><i class="fas fa-dot-circle text-primary me-1"></i>ASP.NET Core 8.0 MVC</li>
+                        <li><i class="fas fa-dot-circle text-primary me-1"></i>Entity Framework Core</li>
+                        <li><i class="fas fa-dot-circle text-primary me-1"></i>SQLite Database</li>
+                        <li><i class="fas fa-dot-circle text-primary me-1"></i>Bootstrap 5</li>
+                        <li><i class="fas fa-dot-circle text-primary me-1"></i>Font Awesome Icons</li>
+                        <li><i class="fas fa-dot-circle text-primary me-1"></i>Razor Pages</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card shadow-sm mt-3">
+                <div class="card-body">
+                    <h5 class="card-title text-secondary">
+                        <i class="fas fa-university me-2"></i>Course Information
+                    </h5>
+                    <p class="card-text small">
+                        <strong>Course:</strong> CS489 Applied Software Development<br>
+                        <strong>Assignment:</strong> Lab 8 - Full-Stack Web Application<br>
+                        <strong>Student:</strong> Mohamed Hussein<br>
+                        <strong>Date:</strong> October 2025
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title text-primary">
+                        <i class="fas fa-route me-2"></i>Application Architecture
+                    </h4>
+                    <div class="row">
+                        <div class="col-md-3 text-center mb-3">
+                            <div class="architecture-item">
+                                <i class="fas fa-window-maximize fa-3x text-primary mb-2"></i>
+                                <h6>Presentation Layer</h6>
+                                <p class="small text-muted">Razor Views & Controllers</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-center mb-3">
+                            <div class="architecture-item">
+                                <i class="fas fa-cogs fa-3x text-success mb-2"></i>
+                                <h6>Business Logic</h6>
+                                <p class="small text-muted">Service Layer</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-center mb-3">
+                            <div class="architecture-item">
+                                <i class="fas fa-database fa-3x text-info mb-2"></i>
+                                <h6>Data Access</h6>
+                                <p class="small text-muted">Entity Framework Core</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-center mb-3">
+                            <div class="architecture-item">
+                                <i class="fas fa-hdd fa-3x text-warning mb-2"></i>
+                                <h6>Data Storage</h6>
+                                <p class="small text-muted">SQLite Database</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .architecture-item {
+        padding: 1rem;
+        border-radius: 8px;
+        transition: transform 0.3s ease;
+    }
+    
+    .architecture-item:hover {
+        transform: translateY(-5px);
+        background-color: #f8f9fa;
+    }
+</style>

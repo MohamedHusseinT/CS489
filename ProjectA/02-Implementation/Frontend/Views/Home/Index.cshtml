@@ -1,0 +1,125 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <div class="hero-section bg-primary text-white py-5 mb-5 rounded">
+        <div class="container">
+            <h1 class="display-4 fw-bold">
+                <i class="fas fa-tooth me-3"></i>Welcome to ADS Dental Surgeries
+            </h1>
+            <p class="lead">Comprehensive Dental Care Management System</p>
+            <p class="mb-4">Lab 8 - Full-Stack Web Application Development</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="card-icon bg-primary text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <i class="fas fa-user fa-2x"></i>
+                    </div>
+                    <h5 class="card-title">Patient Management</h5>
+                    <p class="card-text">Manage patient records, appointments, and personal information with our comprehensive patient management system.</p>
+                    <a asp-controller="Patient" asp-action="Index" class="btn btn-primary">
+                        <i class="fas fa-users me-2"></i>View Patients
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="card-icon bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <i class="fas fa-map-marker-alt fa-2x"></i>
+                    </div>
+                    <h5 class="card-title">Address Management</h5>
+                    <p class="card-text">Maintain accurate address records for patients and dental surgery locations across multiple locations.</p>
+                    <a asp-controller="Address" asp-action="Index" class="btn btn-success">
+                        <i class="fas fa-address-book me-2"></i>View Addresses
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="card-icon bg-info text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <i class="fas fa-calendar-check fa-2x"></i>
+                    </div>
+                    <h5 class="card-title">Appointment System</h5>
+                    <p class="card-text">Schedule and manage dental appointments with integrated patient and dentist information.</p>
+                    <a asp-controller="Home" asp-action="About" class="btn btn-info">
+                        <i class="fas fa-info-circle me-2"></i>Learn More
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>System Overview
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <h3 class="text-primary">4</h3>
+                                <p class="text-muted">Total Patients</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <h3 class="text-success">5</h3>
+                                <p class="text-muted">Addresses</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <h3 class="text-info">3</h3>
+                                <p class="text-muted">Dental Surgeries</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <h3 class="text-warning">6</h3>
+                                <p class="text-muted">Appointments</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    }
+    
+    .card-icon {
+        transition: transform 0.3s ease;
+    }
+    
+    .card:hover .card-icon {
+        transform: scale(1.1);
+    }
+    
+    .stat-item h3 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stat-item p {
+        font-size: 1.1rem;
+        margin-bottom: 0;
+    }
+</style>

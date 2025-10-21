@@ -1,0 +1,278 @@
+@model ADSDentalSurgeriesWebApp.ViewModels.AddressViewModel
+@{
+    ViewData["Title"] = "Address Details";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="display-6 text-primary">
+                        <i class="fas fa-map-marker-alt me-2"></i>Address Details
+                    </h1>
+                    <p class="text-muted">View address information and associated records</p>
+                </div>
+                <div class="btn-group" role="group">
+                    <a asp-action="Edit" asp-route-id="@Model.AddressId" class="btn btn-warning">
+                        <i class="fas fa-edit me-2"></i>Edit
+                    </a>
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to List
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Address Information -->
+                <div class="col-md-8">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-map-marker-alt me-2"></i>Address Information
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Street Address</label>
+                                        <div class="fs-5 fw-bold">@Model.Street</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Country</label>
+                                        <div class="fs-6">
+                                            <i class="fas fa-globe me-1"></i>@(Model.Country ?? "USA")
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">City</label>
+                                        <div class="fs-6">
+                                            <i class="fas fa-city me-1"></i>@Model.City
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">State</label>
+                                        <div class="fs-6">
+                                            <span class="badge bg-secondary">@Model.State</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Zip Code</label>
+                                        <div class="fs-6">
+                                            <code>@Model.ZipCode</code>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-muted">Full Address</label>
+                                <div class="fs-6">
+                                    <i class="fas fa-map-marker-alt me-1"></i>@Model.FullAddress
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-muted">Created Date</label>
+                                <div class="fs-6">
+                                    <i class="fas fa-calendar-plus me-1"></i>@Model.CreatedDate.ToString("MMMM dd, yyyy 'at' h:mm tt")
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="col-md-4">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-chart-bar me-2"></i>Quick Stats
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-6 mb-3">
+                                    <div class="stat-item">
+                                        <h3 class="text-success">@Model.PatientCount</h3>
+                                        <p class="text-muted mb-0">Patients</p>
+                                    </div>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <div class="stat-item">
+                                        <h3 class="text-warning">@Model.SurgeryCount</h3>
+                                        <p class="text-muted mb-0">Surgeries</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Associated Patients -->
+            @if (Model.Patients != null && Model.Patients.Any())
+            {
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-users me-2"></i>Associated Patients (@Model.Patients.Count)
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-success">
+                                    <tr>
+                                        <th>Patient Number</th>
+                                        <th>Full Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Registration Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var patient in Model.Patients)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <span class="badge bg-secondary">@patient.PatientNumber</span>
+                                            </td>
+                                            <td>
+                                                <strong>@patient.FullName</strong>
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(patient.Email))
+                                                {
+                                                    <a href="mailto:@patient.Email" class="text-decoration-none">
+                                                        <i class="fas fa-envelope me-1"></i>@patient.Email
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">No email</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(patient.PhoneNumber))
+                                                {
+                                                    <a href="tel:@patient.PhoneNumber" class="text-decoration-none">
+                                                        <i class="fas fa-phone me-1"></i>@patient.PhoneNumber
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">No phone</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <small>@patient.CreatedDate.ToString("MMM dd, yyyy")</small>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- Associated Surgeries -->
+            @if (Model.Surgeries != null && Model.Surgeries.Any())
+            {
+                <div class="card shadow-sm">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-hospital me-2"></i>Associated Surgeries (@Model.Surgeries.Count)
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-warning">
+                                    <tr>
+                                        <th>Surgery Number</th>
+                                        <th>Name</th>
+                                        <th>Phone</th>
+                                        <th>Email</th>
+                                        <th>Created Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var surgery in Model.Surgeries)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <span class="badge bg-secondary">@surgery.SurgeryNumber</span>
+                                            </td>
+                                            <td>
+                                                <strong>@surgery.Name</strong>
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(surgery.PhoneNumber))
+                                                {
+                                                    <a href="tel:@surgery.PhoneNumber" class="text-decoration-none">
+                                                        <i class="fas fa-phone me-1"></i>@surgery.PhoneNumber
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">No phone</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(surgery.Email))
+                                                {
+                                                    <a href="mailto:@surgery.Email" class="text-decoration-none">
+                                                        <i class="fas fa-envelope me-1"></i>@surgery.Email
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">No email</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <small>@surgery.CreatedDate.ToString("MMM dd, yyyy")</small>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card shadow-sm">
+                    <div class="card-body text-center py-4">
+                        <i class="fas fa-hospital-slash fa-2x text-muted mb-3"></i>
+                        <h5 class="text-muted">No Associated Records</h5>
+                        <p class="text-muted">This address has no associated patients or surgeries.</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .stat-item h3 {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+</style>

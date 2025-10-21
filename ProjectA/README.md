@@ -1,7 +1,7 @@
-# ProjectA - Enterprise Web Application
+# ProjectA - Advantis Dental Surgeries (ADS) Enterprise Web Application
 
 ## Project Overview
-This project implements a comprehensive enterprise web application following modern software development practices and industry standards.
+This project implements **Advantis Dental Surgeries (ADS)**, a comprehensive enterprise web application for managing dental surgery operations. The application follows modern software development practices and industry standards, integrating all the .NET projects developed throughout the CS489 labs.
 
 ## Grading Rubrics Alignment (160 Total Points)
 
@@ -33,11 +33,12 @@ This project implements a comprehensive enterprise web application following mod
 - **Item 17: Project Presentation/Demo** (10 pts) - `05-Presentation/`
 
 ## Technology Stack
-- **Backend**: .NET 8 Web API, Entity Framework Core, SQLite/PostgreSQL
-- **Frontend**: React/Angular/Vue.js (TBD)
+- **Backend**: .NET 8 Web API, Entity Framework Core, SQLite
+- **Frontend**: ASP.NET Core MVC with Razor Views
 - **Testing**: xUnit, Moq, Microsoft.AspNetCore.Mvc.Testing
-- **Deployment**: Azure/AWS/GCP, Docker, GitHub Actions
-- **Security**: JWT Authentication, Authorization, HTTPS
+- **Deployment**: Docker, Azure/AWS/GCP, GitHub Actions
+- **Security**: JWT Authentication, Role-Based Authorization, HTTPS
+- **Database**: SQLite with Entity Framework Core migrations
 
 ## Project Timeline
 - **Phase 1**: Project Artifacts (Weeks 1-2)
