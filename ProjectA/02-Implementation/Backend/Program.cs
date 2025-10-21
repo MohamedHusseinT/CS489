@@ -1,4 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using ADSDentalSurgeriesWebAPI.Data;
 using ADSDentalSurgeriesWebAPI.Services;
 
@@ -11,9 +14,27 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<ADSDbContext>(options =>
     options.UseSqlite("Data Source=ads_dental_surgeries_webapi.db"));
 
+// Add JWT Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "ADS-Dental-Surgeries",
+            ValidAudience = "ADS-Dental-Surgeries-Users",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ADS-Dental-Surgeries-Secret-Key-2024-This-Is-A-Very-Long-Secret-Key-For-JWT-Token-Generation-And-Validation"))
+        };
+    });
+
 // Add services
 builder.Services.AddScoped<PatientService>();
 builder.Services.AddScoped<AddressService>();
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<JwtService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -54,6 +75,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

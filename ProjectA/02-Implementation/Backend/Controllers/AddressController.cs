@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using ADSDentalSurgeriesWebAPI.Services;
 using ADSDentalSurgeriesWebAPI.Models;
 using ADSDentalSurgeriesWebAPI.DTOs;
@@ -8,9 +9,11 @@ namespace ADSDentalSurgeriesWebAPI.Controllers
 {
     /// <summary>
     /// REST API Controller for Address operations
+    /// Role-based access: ADMIN and RECEPTIONIST roles can access
     /// </summary>
     [ApiController]
     [Route("adsweb/api/v1/addresses")]
+    [Authorize(Roles = "ADMIN,RECEPTIONIST")] // Require authentication for all endpoints
     public class AddressController : ControllerBase
     {
         private readonly AddressService _addressService;

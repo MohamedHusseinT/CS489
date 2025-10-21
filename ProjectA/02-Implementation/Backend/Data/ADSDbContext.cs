@@ -18,6 +18,11 @@ namespace ADSDentalSurgeriesWebAPI.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Dentist> Dentists { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        
+        // Authentication entities
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -122,6 +127,86 @@ namespace ADSDentalSurgeriesWebAPI.Data
                 new Appointment { AppointmentId = 4, AppointmentNumber = "A004", AppointmentDate = new DateTime(2013, 9, 14), AppointmentTime = new TimeSpan(14, 0, 0), PatientId = 3, DentistId = 2, SurgeryId = 1 },
                 new Appointment { AppointmentId = 5, AppointmentNumber = "A005", AppointmentDate = new DateTime(2013, 9, 14), AppointmentTime = new TimeSpan(16, 30, 0), PatientId = 2, DentistId = 3, SurgeryId = 3 },
                 new Appointment { AppointmentId = 6, AppointmentNumber = "A006", AppointmentDate = new DateTime(2013, 9, 15), AppointmentTime = new TimeSpan(18, 0, 0), PatientId = 4, DentistId = 3, SurgeryId = 2 }
+            );
+
+            // Configure Authentication Entities
+            // User -> UserRole (One-to-Many)
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.UserRoles)
+                .WithOne(ur => ur.User)
+                .HasForeignKey(ur => ur.UserId);
+
+            // Role -> UserRole (One-to-Many)
+            modelBuilder.Entity<Role>()
+                .HasMany(r => r.UserRoles)
+                .WithOne(ur => ur.Role)
+                .HasForeignKey(ur => ur.RoleId);
+
+            // Unique constraints for authentication
+            modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
+            modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+            modelBuilder.Entity<Role>().HasIndex(r => r.RoleName).IsUnique();
+
+            // Seed Roles
+            modelBuilder.Entity<Role>().HasData(
+                new Role { RoleId = 1, RoleName = "ADMIN", Description = "Administrator with full access" },
+                new Role { RoleId = 2, RoleName = "DENTIST", Description = "Dentist with access to patient records and appointments" },
+                new Role { RoleId = 3, RoleName = "RECEPTIONIST", Description = "Receptionist with access to appointments and basic patient info" },
+                new Role { RoleId = 4, RoleName = "USER", Description = "Regular user with limited access" }
+            );
+
+            // Seed Users (passwords are hashed using BCrypt)
+            // Default password for all users: "password123"
+            // Admin password: "admin123"
+            modelBuilder.Entity<User>().HasData(
+                new User 
+                { 
+                    UserId = 1, 
+                    Username = "admin", 
+                    Email = "admin@ads.com", 
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin123"),
+                    FirstName = "System",
+                    LastName = "Administrator",
+                    IsActive = true
+                },
+                new User 
+                { 
+                    UserId = 2, 
+                    Username = "tony.smith", 
+                    Email = "tony.smith@ads.com", 
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("password123"),
+                    FirstName = "Tony",
+                    LastName = "Smith",
+                    IsActive = true
+                },
+                new User 
+                { 
+                    UserId = 3, 
+                    Username = "helen.pearson", 
+                    Email = "helen.pearson@ads.com", 
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("password123"),
+                    FirstName = "Helen",
+                    LastName = "Pearson",
+                    IsActive = true
+                },
+                new User 
+                { 
+                    UserId = 4, 
+                    Username = "receptionist", 
+                    Email = "receptionist@ads.com", 
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("password123"),
+                    FirstName = "Office",
+                    LastName = "Receptionist",
+                    IsActive = true
+                }
+            );
+
+            // Seed UserRoles
+            modelBuilder.Entity<UserRole>().HasData(
+                new UserRole { UserRoleId = 1, UserId = 1, RoleId = 1, AssignedDate = DateTime.Now }, // admin -> ADMIN
+                new UserRole { UserRoleId = 2, UserId = 2, RoleId = 2, AssignedDate = DateTime.Now }, // tony.smith -> DENTIST
+                new UserRole { UserRoleId = 3, UserId = 3, RoleId = 2, AssignedDate = DateTime.Now }, // helen.pearson -> DENTIST
+                new UserRole { UserRoleId = 4, UserId = 4, RoleId = 3, AssignedDate = DateTime.Now }  // receptionist -> RECEPTIONIST
             );
         }
     }

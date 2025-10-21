@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
 using ADSDentalSurgeriesWebAPI.Services;
@@ -10,9 +11,11 @@ namespace ADSDentalSurgeriesWebAPI.Controllers
 {
     /// <summary>
     /// REST API Controller for Patient operations
+    /// Role-based access: DENTIST, RECEPTIONIST, and ADMIN roles can access
     /// </summary>
     [ApiController]
     [Route("adsweb/api/v1/patients")]
+    [Authorize(Roles = "DENTIST,RECEPTIONIST,ADMIN")] // Require authentication for all endpoints
     public class PatientController : ControllerBase
     {
         private readonly PatientService _patientService;
